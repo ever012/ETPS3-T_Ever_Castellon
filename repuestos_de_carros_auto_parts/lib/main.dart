@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color.fromARGB(255, 238, 238, 238),
       ),
 
-      initialRoute: '/usuarios_page',
+      initialRoute: '/',
       routes: {
         '/': (context) => MyHomePage(),
         '/login_page': (context) => LoginPage(), //primera forma de hacerlo
