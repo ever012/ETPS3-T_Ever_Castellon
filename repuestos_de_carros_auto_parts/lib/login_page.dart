@@ -9,8 +9,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController(text: "correo@gmail.com");
+    _passwordController = TextEditingController(text: "123456");
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+
 
   //crear una notificacion en la parte inferior de la app
   void _showNotification(String message) {
@@ -114,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               onChanged: (value) {},
+
             ),
           );
         });

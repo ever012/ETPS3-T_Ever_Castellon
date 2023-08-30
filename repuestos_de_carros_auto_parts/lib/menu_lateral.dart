@@ -19,18 +19,41 @@ class MenuLateral extends StatelessWidget {
             Ink(
               color: Colors.indigo,
               child: new ListTile(
-                title: Text("MENU 1", style: TextStyle(color: Colors.white),),
+                title: Text("INICIO", style: TextStyle(color: Colors.white),),
+                onTap: (){
+                Navigator.pushNamed(context, '/');
+              },
               ),
             ),
             new ListTile(
-              title: Text("MENU 2"),
-              onTap: (){},
+              title: Text("NUEVO PRODUCTO"),
+              onTap: (){
+                Navigator.pushNamed(context, '/nuevo_producto_page');
+              },
             ),
             new ListTile(
-              title: Text("MENU 3"),
+              title: Text("NUEVA SUCURSAL"),
+              onTap: (){
+                Navigator.pushNamed(context, '/nueva_sucursal_page');
+              },
             ),
             new ListTile(
-              title: Text("MENU 4"),
+              title: Text("UBICACIONES"),
+              onTap: (){
+                Navigator.pushNamed(context, '/ubicaciones_page');
+              },
+            ),
+            new ListTile(
+              title: Text("ROLES"),
+              onTap: (){
+                Navigator.pushNamed(context, '/roles_page');
+              },
+            ),
+            new ListTile(
+              title: Text("USUARIOS"),
+              onTap: (){
+                Navigator.pushNamed(context, '/usuarios_page');
+              },
             )
 
           ],

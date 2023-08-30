@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/login_page.dart';
+import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:repuestos_de_carros_auto_parts/nueva_sucursal_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nuevo_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Repuestos de Carros Auto Parts',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
@@ -148,53 +149,5 @@ class MyHomePage extends StatelessWidget {
 
 
 
-
-
-
-
-
-
-
-
-
-class MenuLateral extends StatelessWidget{
-
-  @override
-  Widget build(BuildContext context) {
-    return new Drawer(
-      child: ListView(
-        children: <Widget>[
-          new UserAccountsDrawerHeader(
-            accountName: Text("AUTO PARTS"),
-            accountEmail: Text("repuestos.support@gmail.com"),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/imagenes/logo_1.png'),
-                    fit: BoxFit.cover
-                )
-            ),
-          ),
-          Ink(
-            color: Colors.indigo,
-            child: new ListTile(
-              title: Text("MENU 1", style: TextStyle(color: Colors.white),),
-            ),
-          ),
-          new ListTile(
-            title: Text("MENU 2"),
-            onTap: (){},
-          ),
-          new ListTile(
-            title: Text("MENU 3"),
-          ),
-          new ListTile(
-            title: Text("MENU 4"),
-          )
-
-        ],
-      ) ,
-    );
-  }
-}
 
 
