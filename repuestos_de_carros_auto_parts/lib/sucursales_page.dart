@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
-import 'menu_lateral.dart';
+import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 
 void main() {
   runApp(const MyApp());
