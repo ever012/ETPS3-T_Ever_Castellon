@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/login_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
+import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
 import 'package:repuestos_de_carros_auto_parts/nueva_sucursal_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nuevo_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
@@ -86,7 +87,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: MenuLateral(),
+      drawer: MenuLateralAdmin(),
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
