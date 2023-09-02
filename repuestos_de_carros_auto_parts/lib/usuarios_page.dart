@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black38),
         useMaterial3: true,
-        scaffoldBackgroundColor: Color.fromARGB(255, 238, 238, 238),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 238, 238, 238),
       ),
 
       routes: {
-        '/': (context) => UsuariosPage(),
+        '/': (context) => const UsuariosPage(),
 
       },
 
@@ -34,54 +34,59 @@ class MyApp extends StatelessWidget {
 
 
 class UsuariosPage extends StatelessWidget {
+  const UsuariosPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _codigoController = TextEditingController();
-    final TextEditingController _correoController = TextEditingController();
-    final TextEditingController _contraseniaController = TextEditingController();
-    final TextEditingController _repetirContraseniaController = TextEditingController();
+    final TextEditingController codigoController = TextEditingController();
+    final TextEditingController correoController = TextEditingController();
+    final TextEditingController contraseniaController = TextEditingController();
+    final TextEditingController repetirContraseniaController = TextEditingController();
 
 
-    return Scaffold(
-        appBar: AppBar(),
-        drawer: MenuLateral(), //solo agregar esta linea para agregar el menu desplegable
-        body: SingleChildScrollView( //este metodo permite que el contenido sea desplazable si ocupa más espacio vertical del disponible.
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft, // Alinea el texto a la izquierda
-                  child: Text("   Usuarios", style: TextStyle(fontSize: 24, color: Colors.red),),
+    return SafeArea(
+        child: Scaffold(
+            appBar: AppBar(),
+            drawer: const MenuLateral(), //solo agregar esta linea para agregar el menu desplegable
+            body: SingleChildScrollView( //este metodo permite que el contenido sea desplazable si ocupa más espacio vertical del disponible.
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Align(
+                      alignment: Alignment.bottomLeft, // Alinea el texto a la izquierda
+                      child: Text("   Usuarios", style: TextStyle(fontSize: 24, color: Colors.red),),
+                    ),
+                    const Divider(
+                      height: 20,
+                      thickness: 5,
+                      indent: 20,
+                      endIndent: 10,
+                      color: Colors.grey,
+                    ),
+                    _codigoTextField(),
+                    const SizedBox(height: 15.0,),
+                    _correoTextField(),
+                    const SizedBox(height: 15.0,),
+                    _contraseniaTextField(),
+                    const SizedBox(height: 15.0,),
+                    _repetirContraseniaTextField(),
+                    const SizedBox(height: 15.0,),
+                    const DropdownMenuRol(),
+                    const SizedBox(height: 15.0,),
+                    _botonGuardar(),
+                    const SizedBox(height: 15.0,),
+                    _botonEliminar(),
+                    const SizedBox(height: 15.0,),
+                    _botonModificar(),
+                    const SizedBox(height: 15.0,),
+                  ],
                 ),
-                const Divider(
-                  height: 20,
-                  thickness: 5,
-                  indent: 20,
-                  endIndent: 10,
-                  color: Colors.grey,
-                ),
-                _codigoTextField(),
-                SizedBox(height: 15.0,),
-                _correoTextField(),
-                SizedBox(height: 15.0,),
-                _contraseniaTextField(),
-                SizedBox(height: 15.0,),
-                _repetirContraseniaTextField(),
-                SizedBox(height: 15.0,),
-                DropdownMenuRol(),
-                SizedBox(height: 15.0,),
-                _botonGuardar(),
-                SizedBox(height: 15.0,),
-                _botonEliminar(),
-                SizedBox(height: 15.0,),
-                _botonModificar(),
-                SizedBox(height: 15.0,),
-              ],
-            ),
-          ),
+              ),
+            )
         )
     );
+
 
 
   }
@@ -94,11 +99,11 @@ Widget _codigoTextField() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             //controller: _codigoController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),
               hintText: 'Ingrese un Codigo',
@@ -123,11 +128,11 @@ Widget _correoTextField() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             //controller: _correoController,
             keyboardType: TextInputType.emailAddress, //pone por defecto el teclado con arroba y demas
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
               //icon: Icon(Icons.numbers),
               hintText: 'Correo',
@@ -153,12 +158,12 @@ Widget _contraseniaTextField() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             //controller: _contraseniaController,
             keyboardType: TextInputType.text,
             //obscureText: true, //hace que la contraseña se vea ****
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),
               hintText: 'Contraseña',
@@ -183,11 +188,11 @@ Widget _repetirContraseniaTextField() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             //controller: _repetirContraseniaController,
             keyboardType: TextInputType.text,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),
               hintText: 'Repetir Contraseña',
@@ -243,10 +248,10 @@ Widget _botonGuardar() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 39, 83, 89),
+          backgroundColor: const Color.fromARGB(255, 39, 83, 89),
           foregroundColor: Colors.white,
-          minimumSize: Size(88, 36),
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          minimumSize: const Size(88, 36),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
@@ -259,8 +264,8 @@ Widget _botonGuardar() {
             debugPrint("se guardo ✅");
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: const Text(
               'GUARDAR',
               style: TextStyle(
                 fontSize: 20.0,
@@ -277,10 +282,10 @@ Widget _botonEliminar() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 39, 83, 89),
+          backgroundColor: const Color.fromARGB(255, 39, 83, 89),
           foregroundColor: Colors.white,
-          minimumSize: Size(88, 36),
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          minimumSize: const Size(88, 36),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
@@ -293,8 +298,8 @@ Widget _botonEliminar() {
             debugPrint("se elimino ❌");
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: const Text(
               'ELIMINAR',
               style: TextStyle(
                 fontSize: 20.0,
@@ -312,10 +317,10 @@ Widget _botonModificar() {
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 39, 83, 89),
+          backgroundColor: const Color.fromARGB(255, 39, 83, 89),
           foregroundColor: Colors.white,
-          minimumSize: Size(88, 36),
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          minimumSize: const Size(88, 36),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
@@ -328,8 +333,8 @@ Widget _botonModificar() {
             debugPrint("se modifico 🔄");
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: const Text(
               'MODIFICAR',
               style: TextStyle(
                 fontSize: 20.0,
