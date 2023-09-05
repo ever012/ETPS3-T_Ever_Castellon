@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black38),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 238, 238, 238),
+        scaffoldBackgroundColor: Colors.white,
       ),
 
-      initialRoute: '/nuevo_producto_page',
+      initialRoute: '/',
       routes: {
         '/': (context) => const MyHomePage(),
         '/login_page': (context) => const LoginPage(), //primera forma de hacerlo
@@ -96,7 +96,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           drawer: const MenuLateralAdmin(),
-          body: Center(
+          body:  Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -108,19 +108,32 @@ class MyHomePage extends StatelessWidget {
                         Navigator.pushNamed(context, '/sucursales_Page'); // Navegar a la página Sucursal1
                       },
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(34)),
+                          boxShadow: [ // Agrega una sombra en la parte inferior
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2, //para neblina en los bordes
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           children: [
-                            Image.asset('assets/imagenes/tienda_1.png'),
-                            const Text("SUCURSALES"),
+                            Image.asset('assets/imagenes/tienda_1.png',
+                                width: 90,fit: BoxFit.cover,),
                           ],
                         ),
                       ),
+
                     ),
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text("SUCURSALES"),
+                    )
                   ],
                 ),
                 const SizedBox(width: 20), // Espacio entre las imágenes y los textos
@@ -133,19 +146,32 @@ class MyHomePage extends StatelessWidget {
                         debugPrint("imagen ubicaciones presionado");
                       },
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(34)),
+                          boxShadow: [ // Agrega una sombra en la parte inferior
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2, //para neblina en los bordes
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           children: [
-                            Image.asset('assets/imagenes/tienda_1.png'),
-                            const Text("UBICACIONES"),
+                            Image.asset('assets/imagenes/tienda_1.png',
+                              width: 90,fit: BoxFit.cover,),
+                                //const Text("UBICACIONES"),
                           ],
                         ),
                       ),
                     ),
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text("UBICACIONES"),
+                    )
                   ],
                 ),
               ],
@@ -160,5 +186,60 @@ class MyHomePage extends StatelessWidget {
 
 
 
-
+Widget getCardItem() {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 100,
+        width: 105,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  child: Icon(Icons.supervisor_account,
+                      size: 24, color: Colors.blueAccent),
+                  padding: const EdgeInsets.all(12),
+                ),
+                Container(
+                  child: Text(
+                    "2100",
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(12),
+                ),
+              ],
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(12),
+                      bottomLeft: Radius.circular(12))),
+              child: Text("Student"),
+              padding: const EdgeInsets.all(12),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
 

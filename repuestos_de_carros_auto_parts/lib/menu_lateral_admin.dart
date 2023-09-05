@@ -8,53 +8,72 @@ class MenuLateralAdmin extends StatelessWidget {
     return Drawer(
         child: ListView(
           children: <Widget>[
-            const UserAccountsDrawerHeader(
-              accountName: Text("AUTO PARTS"),
-              accountEmail: Text("repuestos.support@gmail.com"),
+            Container(
+              height: 200, // Ajusta la altura de la imagen como desees
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/imagenes/logoautoparts.png'),
-                      fit: BoxFit.cover
-                  )
+                image: DecorationImage(
+                  image: AssetImage('assets/imagenes/logoautoparts.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Ink(
-              color: Colors.indigo,
+              color: Color(0xffD64747),
               child: ListTile(
-                title: const Text("INICIO", style: TextStyle(color: Colors.white),),
+                leading: Image.asset('assets/Iconos/user_wite.png'),
+                title: const Text("usuario1@gmail.com", style: TextStyle(color: Colors.white),),
                 onTap: (){
                 Navigator.pushNamed(context, '/');
               },
               ),
             ),
             ListTile(
-              title: const Text("NUEVO PRODUCTO"),
+              leading: Icon(Icons.home_outlined, color: Colors.black),
+              title: const Text("HOME"),
               onTap: (){
-                Navigator.pushNamed(context, '/nuevo_producto_page');
+                Navigator.pushNamed(context, '/');
               },
             ),
             ListTile(
-              title: const Text("NUEVA SUCURSAL"),
+              leading: Icon(Icons.list_outlined, color: Colors.black),
+              title: const Text("CATEGORIAS"),
               onTap: (){
-                Navigator.pushNamed(context, '/nueva_sucursal_page');
+                Navigator.pushNamed(context, '/');
               },
             ),
             ListTile(
+              leading: Icon(Icons.location_on_outlined, color: Colors.black),
               title: const Text("UBICACIONES"),
               onTap: (){
-                Navigator.pushNamed(context, '/ubicaciones_page');
+                Navigator.pushNamed(context, '/');
               },
             ),
             ListTile(
-              title: const Text("ROLES"),
+              leading: Icon(Icons.business_outlined, color: Colors.black),
+              title: const Text("SUCURSALES"),
               onTap: (){
-                Navigator.pushNamed(context, '/roles_page');
+                Navigator.pushNamed(context, '/');
               },
             ),
             ListTile(
+              leading: Icon(Icons.production_quantity_limits_outlined, color: Colors.black),
+              title: const Text("PRODUCTOS"),
+              onTap: (){
+                Navigator.pushNamed(context, '/');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.people_outlined, color: Colors.black),
               title: const Text("USUARIOS"),
               onTap: (){
-                Navigator.pushNamed(context, '/usuarios_page');
+                Navigator.pushNamed(context, '/');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings_outlined, color: Colors.black),
+              title: const Text("ROLES"),
+              onTap: (){
+                Navigator.pushNamed(context, '/');
               },
             )
 
