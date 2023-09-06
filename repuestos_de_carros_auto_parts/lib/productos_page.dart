@@ -32,87 +32,111 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class ProductosPage extends StatefulWidget {
+  const ProductosPage({Key? key});
 
+  @override
+  _ProductosPageState createState() => _ProductosPageState();
+}
 
+class _ProductosPageState extends State<ProductosPage> {
+  TextEditingController _searchController = TextEditingController();
+  List<String> sucursales = [
+    "COLONIA ESCALON",
+    "SANTA TECLA",
+    "29 AV. NORTE",
+    "APOPA",
+    "CHALATENANGO",
+    "SAN BENITO",
+    "AHUACHAPAN",
+  ];
 
+  List<String> filteredSucursales = [];
 
+  @override
+  void initState() {
+    super.initState();
+    filteredSucursales = sucursales;
+  }
 
-
-
-class ProductosPage extends StatelessWidget {
-  const ProductosPage({super.key});
+  void _filterSucursales(String query) {
+    setState(() {
+      filteredSucursales = sucursales
+          .where((sucursal) =>
+          sucursal.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-    Map<dynamic, dynamic>? parametros = ModalRoute.of(context)?.settings.arguments as Map<dynamic, dynamic>?; //obtener todos los argumentos
-    // Comprueba si los argumentos son no nulos y del tipo esperado
-    if (parametros != null && parametros.containsKey('sucursal')) {
-      final String sucursal = parametros['sucursal'] as String;
     return SafeArea(
-          child: Scaffold(
-              appBar: AppBar(),
-              drawer: const MenuLateral(), //solo agregar esta linea para agregar el menu desplegable
-              body: SingleChildScrollView( //este metodo permite que el contenido sea desplazable si ocupa más espacio vertical del disponible.
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Productos $sucursal"),
-                      const Divider(
-                        height: 20,
-                        thickness: 5,
-                        indent: 20,
-                        endIndent: 10,
-                        color: Colors.black,
-                      ),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO2",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO3",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO4",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO5",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO6",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO7",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO8",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO9",descripcion: "descripcion del producto", precio: "10.50"),
-                      const CardSucursal(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO10",descripcion: "descripcion del producto", precio: "10.50"),
-
-
-                    ],
+      child: Scaffold(
+        appBar: AppBar(
+          foregroundColor: Colors.black, //color de los iconos
+          backgroundColor: Colors.white,  //backround del appBar(menu)
+          title: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Colors.white,
+                border: Border.all(color: Color(0xff95A4BB),style: BorderStyle.solid,width: 1.0)
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                Icon(Icons.search),
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: _filterSucursales,
+                    decoration: InputDecoration(
+                      hintText: "Buscar sucursal...",
+                      border: InputBorder.none,
+                    ),
+                    textCapitalization: TextCapitalization.none, // Acepta mayúsculas y minúsculas
+                    autofocus: false, // Quita el enfoque automático
                   ),
                 ),
-              )
-          )
-    );
-
-
-    }else {
-      // En caso de que los argumentos no sean válidos, muestra un mensaje de error o regresa a la página anterior
-      return SafeArea(
-          child: Scaffold(
-            appBar: AppBar(title: const Text('Error')),
-            body: const Center(
-              child: Text('Error al recibir los argumentos'),
-
+                if (_searchController.text.isNotEmpty)
+                  IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        _searchController.clear();
+                        filteredSucursales = sucursales;
+                      });
+                    },
+                  ),
+              ],
             ),
-          )
-      );
-
-    }
+          ),
+        ),
+        drawer: const MenuLateral(),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: filteredSucursales
+                  .map((texto) => CardProducto(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO",descripcion: "descripcion del producto", precio: "10.50"),)
+                  .toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
 
 
 
-class CardSucursal extends StatelessWidget {
+class CardProducto extends StatelessWidget {
   final String imagen;
   final String texto;
   final String descripcion;
   final String precio;
 
-  const CardSucursal({super.key, String? imagen, String? texto, String? descripcion, String? precio})  //en caso de no introducir los parametros
+  const CardProducto({super.key, String? imagen, String? texto, String? descripcion, String? precio})  //en caso de no introducir los parametros
       : imagen = imagen ?? "assets/imagenes/tienda_1.png", //valor por de
         texto = texto ?? "TEXTO LEATORIO",
         descripcion = descripcion ?? "0",

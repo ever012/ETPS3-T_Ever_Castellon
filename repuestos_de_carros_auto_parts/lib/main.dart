@@ -123,7 +123,7 @@ class MyHomePage extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           children: [
-                            Image.asset('assets/imagenes/tienda_1.png',
+                            Image.asset('assets/Iconos/tienda.png',
                                 width: 90,fit: BoxFit.cover,),
                           ],
                         ),
@@ -161,9 +161,8 @@ class MyHomePage extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           children: [
-                            Image.asset('assets/imagenes/tienda_1.png',
+                            Image.asset('assets/Iconos/ubicacion2.png',
                               width: 90,fit: BoxFit.cover,),
-                                //const Text("UBICACIONES"),
                           ],
                         ),
                       ),
