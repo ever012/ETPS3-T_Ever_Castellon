@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:repuestos_de_carros_auto_parts/main.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 
-class LoginPage extends StatefulWidget {
+class RegistrarPage extends StatefulWidget {
   static String id = "login_page";
 
-  const LoginPage({super.key});
+  const RegistrarPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegistrarPage> createState() => _RegistrarPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrarPageState extends State<RegistrarPage> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   bool passwordVisible=false;
+  bool passwordVisible2=false;
 
   @override
   void initState() {
     super.initState();
     passwordVisible=true;
+    passwordVisible2=false;
     _emailController = TextEditingController(text: "correo@gmail.com");
     _passwordController = TextEditingController(text: "123456");
   }
@@ -80,21 +81,21 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15.0,),
-                    const Text("Iniciar Sesión", style: TextStyle(fontSize: 30.0,color: Colors.black,fontWeight: FontWeight.bold),),
+                    const Text("Regístrate", style: TextStyle(fontSize: 30.0,color: Colors.black,fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 15.0,),
+                    const Align(alignment: Alignment.center,
+                      child: Text("Registrate con tu correo electronico",
+                        style: TextStyle(fontSize: 16.0, color: Color(0xff7B8799)),),
+                    ),
                     const SizedBox(height: 15.0,),
                     _userTextField(),
                     const SizedBox(height: 15.0,),
                     _passwordTextField(),
                     const SizedBox(height: 15.0,),
-                    _botonLogin(),
+                    _repetirPasswordTextField(),
                     const SizedBox(height: 15.0,),
-                    _IrAInicioTextField(),
-                    const SizedBox(height: 140.0,),
-                    _crearCuentaTextField(),
-                    const Align(alignment: Alignment.bottomLeft,
-                      child: Text("Recuperar Contraseña...",
-                        style: TextStyle(fontSize: 15.0, color: Colors.grey),),
-                    ),
+                    _botonRegistrar(),
+                    const SizedBox(height: 15.0,),
                   ],
                 ),
               ),
@@ -130,9 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              onChanged: (value) {
-
-              },
+              onChanged: (value) {},
 
             ),
           );
@@ -178,20 +177,40 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  Widget _crearCuentaTextField() {
+
+  Widget _repetirPasswordTextField() {
     return StreamBuilder(
         stream: null,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/registrar_usuario_page');
-              },
-              child: const Align(alignment: Alignment.bottomLeft,
-                child: Text("Crear Cuenta...",
-                  style: TextStyle(fontSize: 20.0, color: Colors.grey),),
+            child: TextField(
+              //controller: _password2Controller,
+              keyboardType: TextInputType.text,
+              obscureText: passwordVisible2,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: Image.asset('assets/Iconos/candado.png'),
+                suffixIcon: IconButton(
+                  icon: Icon(passwordVisible2
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: () {
+                    setState(
+                          () {
+                        passwordVisible2 = !passwordVisible2;
+                      },
+                    );
+                  },
+                ),
+                hintText: 'Confirmar Contraseña',
+                labelText: 'Confirmar Contraseña',
+                labelStyle: TextStyle(color: Colors.black),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                ),
               ),
+              onChanged: (value) {},
             ),
           );
         });
@@ -199,35 +218,14 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-  Widget _IrAInicioTextField() {
-    return StreamBuilder(
-        stream: null,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/');
-              },
-              child: const Align(alignment: Alignment.centerRight,
-                child: Text("Ir al inicio...",
-                  style: TextStyle(fontSize: 20.0, color: Colors.grey),),
-              ),
-            ),
-          );
-        });
-  }
-
-
-
-  Widget _botonLogin() {
+  Widget _botonRegistrar() {
     return StreamBuilder(
         stream: null,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              minimumSize: const Size(350, 30),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(350, 30),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -238,35 +236,26 @@ class _LoginPageState extends State<LoginPage> {
           return ElevatedButton(
             style: raisedButtonStyle,
             onPressed: (){
-              if (_emailController.text == "" || _passwordController.text == "") {
-                _showNotification('Ingrese correo y/o contraseña');
-              }else {
-                if (_emailController.text == 'correo@gmail.com' &&
-                    _passwordController.text == '123456') {
-                  _showNotification('Datos correctos');
-                } else {
-                  _showNotification('Credenciales incorrectas');
-                }
-              }
+              _showNotification("Listo!, registrado 😋");
             },
             child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
-                width: 200,
-                child: Row(
-                  children: [
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+              width: 200,
+              child: Row(
+                children: [
 
-                    SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
-                    Text(
-                      'Iniciar',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
+                  Text(
+                    'Registrarse',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width: 15.0),
-                    Image.asset("assets/Iconos/ingresar.png",),
-                  ],
-                ),
+                  ),
+                  SizedBox(width: 15.0),
+                  Image.asset("assets/Iconos/ingresar.png",),
+                ],
+              ),
             ),
           );
         });

@@ -7,6 +7,7 @@ import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nuevo_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nuevos_roles_page.dart';
+import 'package:repuestos_de_carros_auto_parts/registrar_usuario_page.dart';
 import 'package:repuestos_de_carros_auto_parts/sucursales_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
 import 'package:repuestos_de_carros_auto_parts/usuarios_page.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MyHomePage(),
+        '/registrar_usuario_page': (context) => const RegistrarPage(),
         '/login_page': (context) => const LoginPage(), //primera forma de hacerlo
         //LoginPage.id: (context) => LoginPage(), //segundo forma de hacerlo
         '/sucursales_Page': (context) => const SucursalesPage(),
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/usuarios_page': (context) => const UsuariosPage(),
         '/info_page': (context) => InfoProductosPage(), //necesita argumentos
         '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
-        '/nueva_categoria_page': (context) => const CategoriasPage(),
+        '/nueva_categoria_page': (context) => const RegistrarPage(),
       },
 
       //home: const MyHomePage(title: 'Flutter Demoo Home Page'),
