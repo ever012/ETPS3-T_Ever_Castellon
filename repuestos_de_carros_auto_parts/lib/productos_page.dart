@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:repuestos_de_carros_auto_parts/info_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/': (context) => const ProductosPage(),
+        '/info_page': (context) => InfoProductosPage(),
 
       },
 
@@ -41,29 +43,49 @@ class ProductosPage extends StatefulWidget {
 
 class _ProductosPageState extends State<ProductosPage> {
   TextEditingController _searchController = TextEditingController();
-  List<String> sucursales = [
-    "COLONIA ESCALON",
-    "SANTA TECLA",
-    "29 AV. NORTE",
-    "APOPA",
-    "CHALATENANGO",
-    "SAN BENITO",
-    "AHUACHAPAN",
+  List<String> productos = [
+    "Filtro Aire",
+    "Filtro Combustible",
+    "Filtro de Cabina",
+    "Filtro de Aceite",
+    "Filtro de Transmision",
+    "Filtro Trampa Agua",
+    "Filtro PVC",
   ];
 
-  List<String> filteredSucursales = [];
+  List<String> descripciones = [
+    "Descripción del producto 1",
+    "Descripción del producto 2",
+    "Descripción del producto 3",
+    "Descripción del producto 4",
+    "Descripción del producto 5",
+    "Descripción del producto 6",
+    "Descripción del producto 7",
+  ];
+
+  List<String> precios = [
+    "57.50",
+    "57.50",
+    "10.50",
+    "80.50",
+    "50.50",
+    "40.00",
+    "57.00",
+  ];
+
+  List<String> filteredProductos = [];
 
   @override
   void initState() {
     super.initState();
-    filteredSucursales = sucursales;
+    filteredProductos = productos;
   }
 
-  void _filterSucursales(String query) {
+  void _filterProductos(String query) {
     setState(() {
-      filteredSucursales = sucursales
-          .where((sucursal) =>
-          sucursal.toLowerCase().contains(query.toLowerCase()))
+      filteredProductos = productos
+          .where((producto) =>
+          producto.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -88,7 +110,7 @@ class _ProductosPageState extends State<ProductosPage> {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    onChanged: _filterSucursales,
+                    onChanged: _filterProductos,
                     decoration: InputDecoration(
                       hintText: "Buscar sucursal...",
                       border: InputBorder.none,
@@ -103,7 +125,7 @@ class _ProductosPageState extends State<ProductosPage> {
                     onPressed: () {
                       setState(() {
                         _searchController.clear();
-                        filteredSucursales = sucursales;
+                        filteredProductos = productos;
                       });
                     },
                   ),
@@ -116,9 +138,39 @@ class _ProductosPageState extends State<ProductosPage> {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: filteredSucursales
-                  .map((texto) => CardProducto(imagen: "assets/imagenes/tienda_1.png",texto: "NOMBRE PRODUCTO",descripcion: "descripcion del producto", precio: "10.50"),)
-                  .toList(),
+              children: [
+                Container(
+                  width: 350,
+                  decoration: BoxDecoration(
+                    color: Color(0xffECF5F8),
+                    border: Border.all(color: Color(0xff223335)),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.0,vertical: 5.0), // Espacio alrededor del texto
+                    child: const Text(
+                      "Productos...",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Color(0xffD64747), // Texto en color blanco
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20), // Espacio entre el texto y los productos
+                ...filteredProductos
+                    .asMap()
+                    .entries
+                    .map(
+                      (entry) => CardProducto(
+                    imagen: "assets/imagenes/tienda_1.png",
+                    texto: entry.value,
+                    descripcion: descripciones[entry.key], // Usamos la lista de descripciones
+                    precio: precios[entry.key], // Usamos la lista de precios
+                  ),
+                )
+                    .toList(),
+              ],
             ),
           ),
         ),
@@ -130,7 +182,8 @@ class _ProductosPageState extends State<ProductosPage> {
 
 
 
-class CardProducto extends StatelessWidget {
+
+  class CardProducto extends StatelessWidget {
   final String imagen;
   final String texto;
   final String descripcion;
@@ -145,44 +198,46 @@ class CardProducto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-
-      // Con esta propiedad modificamos la forma de nuestro card
-      // Aqui utilizo RoundedRectangleBorder para proporcionarle esquinas circulares al Card
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-
-      // Con esta propiedad agregamos margen a nuestro Card
-      // El margen es la separación entre widgets o entre los bordes del widget padre e hijo
-      margin: const EdgeInsets.all(15),
+      surfaceTintColor: Colors.white, //background
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0),),
+        side: BorderSide(color: Colors.black, width: 1.0,), //grosor y color de los bordes
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 1),
 
       // Con esta propiedad agregamos elevación a nuestro card
       // La sombra que tiene el Card aumentará
-      elevation: 10,
+      elevation: 5,
 
     // Envolver el contenido de la Card con InkWell para detectar el clic
       child: InkWell(
         splashColor: const Color.fromARGB(255, 71, 73, 73),
         onTap: () {
-          debugPrint('se abre el google maps 😀');
+          Navigator.pushNamed(context,"/info_page",arguments: {'id': "1","nombre":texto,"precio":precio},
+          );
         },
         child: SizedBox(
-          width: 300,
+          width: 340,
           child: Column(
             children: <Widget>[
 
               // Usamos ListTile para ordenar la información del card como titulo, subtitulo e icono
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(1, 1, 5, 0),
-                title: const Text('Nombre Producto'),
+                title: Text(texto),
                 subtitle: Text(descripcion),
                 leading: Image.asset(imagen),
               ),
 
               // Usamos una fila para ordenar los botones del card
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text('\$$precio', style: const TextStyle(fontSize: 24.0)),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text('\$$precio', style: const TextStyle(fontSize: 24.0)),
+                  ],
+                ),
               )
             ],
           ),

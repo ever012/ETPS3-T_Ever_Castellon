@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/login_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
+import 'package:repuestos_de_carros_auto_parts/nueva_categoria_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nueva_sucursal_page.dart';
+import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nuevo_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
-import 'package:repuestos_de_carros_auto_parts/roles_page.dart';
+import 'package:repuestos_de_carros_auto_parts/nuevos_roles_page.dart';
 import 'package:repuestos_de_carros_auto_parts/sucursales_page.dart';
-import 'package:repuestos_de_carros_auto_parts/ubicaciones_page.dart';
+import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
 import 'package:repuestos_de_carros_auto_parts/usuarios_page.dart';
+
+import 'info_producto_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,12 +39,16 @@ class MyApp extends StatelessWidget {
         '/login_page': (context) => const LoginPage(), //primera forma de hacerlo
         //LoginPage.id: (context) => LoginPage(), //segundo forma de hacerlo
         '/sucursales_Page': (context) => const SucursalesPage(),
-        '/productos_page': (context) => const ProductosPage(), //necesita recibir parametros de "sucursales_page"
+        '/productos_page': (context) => const ProductosPage(), //sucursal especifica
+        //'/Todos_productos_page': (context) => const TodosProductosPage(), //todos los que existan
         '/nuevo_producto_page': (context) => const NuevoProductoPage(), //quitar al terminar
         '/nueva_sucursal_page': (context) => const NuevaSucursalPage(), //quitar al terminar
         '/ubicaciones_page': (context) => const UbicacionesPage(), //quitar al terminar
         '/roles_page': (context) => const RolesPage(), //quitar al terminar
-        '/usuarios_page': (context) => const UsuariosPage(), //quitar al terminar
+        '/usuarios_page': (context) => const UsuariosPage(),
+        '/info_page': (context) => InfoProductosPage(), //necesita argumentos
+        '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
+        '/nueva_categoria_page': (context) => const CategoriasPage(),
       },
 
       //home: const MyHomePage(title: 'Flutter Demoo Home Page'),
@@ -76,16 +84,15 @@ class MyHomePage extends StatelessWidget {
               ],
               flexibleSpace: ClipRRect(
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
+                  bottomLeft: Radius.circular(0.0),
+                  bottomRight: Radius.circular(0.0),
                 ),
                 child: Stack(
                   children: [
                     Positioned(
                       top: 0,
                       left: -4,
-                      child: Image.asset(
-                        'assets/imagenes/logoautoparts.png',
+                      child: Image.asset('assets/imagenes/logoautoparts.png',
                         width: 370.0,
                         fit: BoxFit.cover,
                       ),

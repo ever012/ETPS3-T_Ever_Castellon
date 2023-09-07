@@ -13,9 +13,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  bool passwordVisible=false;
+
   @override
   void initState() {
     super.initState();
+    passwordVisible=true;
     _emailController = TextEditingController(text: "correo@gmail.com");
     _passwordController = TextEditingController(text: "123456");
   }
@@ -73,10 +76,10 @@ class _LoginPageState extends State<LoginPage> {
             body: SingleChildScrollView(
               child: Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, //lo deja todo como centrado son necesidad de darle padding top
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15.0,),
-                    const Text("Iniciar Sesión", style: TextStyle(fontSize: 30.0,color: Colors.red),),
+                    const Text("Iniciar Sesión", style: TextStyle(fontSize: 30.0,color: Colors.black,fontWeight: FontWeight.bold),),
                     const SizedBox(height: 15.0,),
                     _userTextField(),
                     const SizedBox(height: 15.0,),
@@ -118,12 +121,13 @@ class _LoginPageState extends State<LoginPage> {
             child: TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress, //pone por defecto el teclado con arroba y demas
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                icon: Icon(Icons.email),
+                prefixIcon: Image.asset('assets/Iconos/correo.png'),
                 hintText: 'Usuario/Correo',
                 labelText: 'Correo electronico',
                 labelStyle: TextStyle(color: Colors.black),
+
                 focusColor: Colors.teal,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
@@ -147,10 +151,22 @@ class _LoginPageState extends State<LoginPage> {
             child: TextField(
               controller: _passwordController,
               keyboardType: TextInputType.text,
-              obscureText: true,
-              decoration: const InputDecoration(
+              obscureText: passwordVisible,
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                icon: Icon(Icons.lock),
+                prefixIcon: Image.asset('assets/Iconos/candado.png'),
+                suffixIcon: IconButton(
+                  icon: Icon(passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: () {
+                    setState(
+                          () {
+                        passwordVisible = !passwordVisible;
+                      },
+                    );
+                  },
+                ),
                 hintText: 'Contraseña',
                 labelText: 'Contraseña',
                 labelStyle: TextStyle(color: Colors.black),
@@ -169,12 +185,12 @@ class _LoginPageState extends State<LoginPage> {
         stream: null,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 39, 83, 89),
+              backgroundColor: Colors.black,
               foregroundColor: Colors.white,
-              minimumSize: const Size(88, 36),
+              minimumSize: const Size(350, 30),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             elevation: 10.0, //da como un sombredado al boton
           );
@@ -196,13 +212,9 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                 width: 200,
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(
-                      Icons.arrow_forward, // Cambia este valor por el icono que desees usar
-                      size: 30.0,
-                      color: Colors.blue, // Cambia el color del icono si es necesario
-                    ),
+
                     SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
                     Text(
                       'Iniciar',
@@ -211,6 +223,8 @@ class _LoginPageState extends State<LoginPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    SizedBox(width: 15.0),
+                    Image.asset("assets/Iconos/ingresar.png",),
                   ],
                 ),
             ),

@@ -23,7 +23,7 @@ class MenuLateralAdmin extends StatelessWidget {
                 leading: Image.asset('assets/Iconos/user_wite.png'),
                 title: const Text("usuario1@gmail.com", style: TextStyle(color: Colors.white),),
                 onTap: (){
-                Navigator.pushNamed(context, '/');
+                //Navigator.pushNamed(context, '/');
               },
               ),
             ),
@@ -38,42 +38,42 @@ class MenuLateralAdmin extends StatelessWidget {
               leading: Icon(Icons.list_outlined, color: Colors.black),
               title: const Text("CATEGORIAS"),
               onTap: (){
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/nueva_categoria_page');
               },
             ),
             ListTile(
               leading: Icon(Icons.location_on_outlined, color: Colors.black),
               title: const Text("UBICACIONES"),
               onTap: (){
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/nueva_ubicacion_page');
               },
             ),
             ListTile(
               leading: Icon(Icons.business_outlined, color: Colors.black),
               title: const Text("SUCURSALES"),
               onTap: (){
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/nueva_sucursal_page');
               },
             ),
             ListTile(
               leading: Icon(Icons.production_quantity_limits_outlined, color: Colors.black),
               title: const Text("PRODUCTOS"),
               onTap: (){
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/nuevo_producto_page'); //cambia a este productos_page
               },
             ),
             ListTile(
               leading: Icon(Icons.people_outlined, color: Colors.black),
               title: const Text("USUARIOS"),
               onTap: (){
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/usuarios_page');
               },
             ),
             ListTile(
               leading: Icon(Icons.settings_outlined, color: Colors.black),
               title: const Text("ROLES"),
               onTap: (){
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/roles_page');
               },
             )
 

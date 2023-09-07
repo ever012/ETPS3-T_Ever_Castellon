@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
+import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
 
 
 void main() {
@@ -45,38 +46,30 @@ class NuevaSucursalPage extends StatelessWidget {
 
     return SafeArea(
         child: Scaffold(
-            appBar: AppBar(),
-            drawer: const MenuLateral(), //solo agregar esta linea para agregar el menu desplegable
+            appBar: AppBar(title: const Text("Sucursal",style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),),
+              centerTitle: true, ),
+            drawer: const MenuLateralAdmin(), //solo agregar esta linea para agregar el menu desplegable
             body: SingleChildScrollView( //este metodo permite que el contenido sea desplazable si ocupa más espacio vertical del disponible.
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Align(
-                      alignment: Alignment.bottomLeft, // Alinea el texto a la izquierda
-                      child: Text("   Nueva Sucursal", style: TextStyle(fontSize: 24, color: Colors.red),),
-                    ),
-                    const Divider(
-                      height: 20,
-                      thickness: 5,
-                      indent: 20,
-                      endIndent: 10,
-                      color: Colors.grey,
-                    ),
+                    const SizedBox(height: 30.0,),
                     _codigoTextField(),
                     const SizedBox(height: 15.0,),
                     _nombreTextField(),
                     const SizedBox(height: 15.0,),
-                    _descripcionTextField(),
-                    const SizedBox(height: 15.0,),
-                    _direccionTextField(),
-                    const SizedBox(height: 15.0,),
-                    _botonGuardar(),
-                    const SizedBox(height: 15.0,),
-                    _botonEliminar(),
-                    const SizedBox(height: 15.0,),
-                    _botonModificar(),
-                    const SizedBox(height: 15.0,),
+                    DropdownMenuUbicaciones(),
+                    const SizedBox(height: 20.0,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta la alineación según tus necesidades
+                      children: [
+                        _botonGuardar(),
+                        _botonEliminar(),
+                        _botonModificar(),
+                      ],
+                    ),
+                    const SizedBox(height: 20.0,),
                   ],
                 ),
               ),
@@ -150,74 +143,16 @@ Widget _nombreTextField() {
 }
 
 
-Widget _descripcionTextField() {
-  return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: TextField(
-            //controller: _descripcionController,
-            keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
-              //icon: Icon(Icons.numbers),
-              hintText: 'Ingrese Descripcion',
-              labelText: 'Descripcion',
-              labelStyle: TextStyle(color: Colors.black),
-              focusColor: Colors.teal,
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
 
-              ),
-            ),
-
-            onChanged: (value) {},
-          ),
-        );
-      });
-}
-
-Widget _direccionTextField() {
-  return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: TextField(
-            //controller: _direccionController,
-            keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
-              //icon: Icon(Icons.numbers),
-              hintText: 'Direccion',
-              labelText: 'Direccion',
-              labelStyle: TextStyle(color: Colors.black),
-              focusColor: Colors.teal,
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
-
-              ),
-            ),
-
-            onChanged: (value) {},
-          ),
-        );
-      });
-}
-
-
-const List<String> list = <String>['Seleccione Sucursal','One', 'Two', 'Three', 'Four'];
-class DropdownMenuExample extends StatefulWidget {
-  const DropdownMenuExample({super.key});
+const List<String> list = <String>['Seleccione Ubicación','One', 'Two', 'Three', 'Four'];
+class DropdownMenuUbicaciones extends StatefulWidget {
+  const DropdownMenuUbicaciones({super.key});
 
   @override
-  State<DropdownMenuExample> createState() => _DropdownMenuExampleState();
+  State<DropdownMenuUbicaciones> createState() => _DropdownMenuUbicacionesState();
 }
 
-class _DropdownMenuExampleState extends State<DropdownMenuExample> {
+class _DropdownMenuUbicacionesState extends State<DropdownMenuUbicaciones> {
   String dropdownValue = list.first;
 
   @override
@@ -239,109 +174,79 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
 }
 
 
+
 Widget _botonGuardar() {
   return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 39, 83, 89),
-          foregroundColor: Colors.white,
-          minimumSize: const Size(88, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+    stream: null,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return GestureDetector(
+        onTap: () {
+          print("Me oprimiste ✅");
+        },
+        child: Container(
+          width: 80.0, // Ajusta el ancho según tus necesidades
+          height: 80.0, // Ajusta el alto según tus necesidades
+          decoration: BoxDecoration(
+            color: Color(0xff229743), // Cambia el color de fondo a verde
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          elevation: 10.0, //da como un sombredado al boton
-        );
-
-        return ElevatedButton(
-          style: raisedButtonStyle,
-          onPressed: (){
-            debugPrint("se guardo ✅");
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: const Text(
-              'GUARDAR',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          child: Center(
+            child: Image.asset("assets/Iconos/guardar.png"),
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 }
 
 Widget _botonEliminar() {
   return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 39, 83, 89),
-          foregroundColor: Colors.white,
-          minimumSize: const Size(88, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+    stream: null,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return GestureDetector(
+        onTap: () {
+          print("se elimino ❌");
+        },
+        child: Container(
+          width: 80.0, // Ajusta el ancho según tus necesidades
+          height: 80.0, // Ajusta el alto según tus necesidades
+          decoration: BoxDecoration(
+            color: Color(0xffF02121), // Cambia el color de fondo a verde
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          elevation: 10.0, //da como un sombredado al boton
-        );
-
-        return ElevatedButton(
-          style: raisedButtonStyle,
-          onPressed: (){
-            debugPrint("se elimino ❌");
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: const Text(
-              'ELIMINAR',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          child: Center(
+            child: Image.asset("assets/Iconos/elimina.png"),
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 }
 
 
 Widget _botonModificar() {
   return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 39, 83, 89),
-          foregroundColor: Colors.white,
-          minimumSize: const Size(88, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+    stream: null,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return GestureDetector(
+        onTap: () {
+          print("se modifico 🔄");
+        },
+        child: Container(
+          width: 80.0, // Ajusta el ancho según tus necesidades
+          height: 80.0, // Ajusta el alto según tus necesidades
+          decoration: BoxDecoration(
+            color: Color(0xff290BE7), // Cambia el color de fondo a verde
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          elevation: 10.0, //da como un sombredado al boton
-        );
-
-        return ElevatedButton(
-          style: raisedButtonStyle,
-          onPressed: (){
-            debugPrint("se modifico 🔄");
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: const Text(
-              'MODIFICAR',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          child: Center(
+            child: Image.asset("assets/Iconos/update.png"),
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 }
-
 
 
 
