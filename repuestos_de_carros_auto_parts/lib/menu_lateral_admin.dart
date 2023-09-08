@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuLateralAdmin extends StatelessWidget {
   const MenuLateralAdmin({super.key});
@@ -75,10 +76,26 @@ class MenuLateralAdmin extends StatelessWidget {
               onTap: (){
                 Navigator.pushNamed(context, '/roles_page');
               },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings_outlined, color: Colors.black),
+              title: const Text("CERRAR SESION"),
+              onTap: (){
+                eliminarSharedPreferences();
+                Navigator.pushNamed(context, '/');
+              },
             )
 
           ],
         ) ,
     );
   }
+}
+
+
+
+
+Future<void> eliminarSharedPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.clear(); // Esto eliminará todas las variables almacenadas en SharedPreferences
 }

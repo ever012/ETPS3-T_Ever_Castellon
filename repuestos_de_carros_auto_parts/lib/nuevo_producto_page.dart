@@ -194,7 +194,8 @@ Widget _descripcionTextField() {
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             //controller: _descripcionController,
-            keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),

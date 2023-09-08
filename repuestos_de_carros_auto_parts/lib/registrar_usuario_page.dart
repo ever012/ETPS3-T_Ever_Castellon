@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:repuestos_de_carros_auto_parts/appBar.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 
 class RegistrarPage extends StatefulWidget {
@@ -44,36 +45,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(210.0),
-              child: AppBar(
-                foregroundColor: Colors.white,
-                backgroundColor: const Color.fromARGB(255, 238, 238, 238),
-                title: const Text(""),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.person, size: 40.0,),
-                    onPressed: () {
-                      // Aquí agregar la funcionalidad del botón de usuario
-                      Navigator.pushNamed(context, '/login_page');
-                    },
-                  ),
-                ],
-                flexibleSpace: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: -4,
-                      child: Image.asset(
-                        'assets/imagenes/logoautoparts.png',
-                        width: 370.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            appBar: AppBarPersonalizada(),
             drawer: const MenuLateral(),
             body: SingleChildScrollView(
               child: Center(

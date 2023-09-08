@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:repuestos_de_carros_auto_parts/appBar.dart';
 import 'package:repuestos_de_carros_auto_parts/main.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = "login_page";
@@ -14,14 +16,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
-  bool passwordVisible=false;
+  bool passwordVisible = false;
+  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
-    passwordVisible=true;
-    _emailController = TextEditingController(text: "correo@gmail.com");
+    passwordVisible = true;
+    _emailController = TextEditingController(text: "correoadmin@gmail.com");
     _passwordController = TextEditingController(text: "123456");
+    SharedPreferences.getInstance().then((prefs) {
+      _prefs = prefs;
+    });
   }
 
   @override
@@ -30,9 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-
-
-  //crear una notificacion en la parte inferior de la app
+  // Crear una notificación en la parte inferior de la app
   void _showNotification(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -43,36 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(210.0),
-              child: AppBar(
-                foregroundColor: Colors.white,
-                backgroundColor: const Color.fromARGB(255, 238, 238, 238),
-                title: const Text(""),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.person, size: 40.0,),
-                    onPressed: () {
-                      // Aquí agregar la funcionalidad del botón de usuario
-                      Navigator.pushNamed(context, '/login_page');
-                    },
-                  ),
-                ],
-                flexibleSpace: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: -4,
-                      child: Image.asset(
-                        'assets/imagenes/logoautoparts.png',
-                        width: 370.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            appBar: AppBarPersonalizada(),
             drawer: const MenuLateral(),
             body: SingleChildScrollView(
               child: Center(
@@ -237,13 +212,19 @@ class _LoginPageState extends State<LoginPage> {
 
           return ElevatedButton(
             style: raisedButtonStyle,
-            onPressed: (){
+            onPressed: () async {
               if (_emailController.text == "" || _passwordController.text == "") {
                 _showNotification('Ingrese correo y/o contraseña');
-              }else {
-                if (_emailController.text == 'correo@gmail.com' &&
+              } else {
+                if (_emailController.text == 'correoadmin@gmail.com' &&
                     _passwordController.text == '123456') {
-                  _showNotification('Datos correctos');
+                  _showNotification('Datos correctos Admin');
+
+                  // Guardar en SharedPreferences
+                  await _prefs.setInt('id', 1);
+                  await _prefs.setString('nombre', 'José');
+
+                  Navigator.pushNamed(context, '/', arguments: {'id': 1, 'nombre': 'José'});
                 } else {
                   _showNotification('Credenciales incorrectas');
                 }
@@ -263,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 15.0),
+                    SizedBox(width: 1.0),
                     Image.asset("assets/Iconos/ingresar.png",),
                   ],
                 ),
