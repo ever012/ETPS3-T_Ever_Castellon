@@ -26,16 +26,12 @@ class AppBarPersonalizada extends StatelessWidget implements PreferredSizeWidget
             bottomLeft: Radius.circular(0.0),
             bottomRight: Radius.circular(0.0),
           ),
-          child: Stack(
-            children: [
-              Positioned(
-                top: 0,
-                left: -4,
-                child: Image.asset('assets/imagenes/logoautoparts.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
+          child: FractionallySizedBox(
+            widthFactor: 1.0, // Esto permite que la imagen ocupe todo el ancho disponible
+            child: Image.asset(
+              'assets/imagenes/logoautoparts.png',
+              fit: BoxFit.fitWidth, // Ajusta la imagen al ancho del espacio disponible
+            ),
           ),
         ),
       ),
