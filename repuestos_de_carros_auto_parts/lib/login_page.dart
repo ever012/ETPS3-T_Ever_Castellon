@@ -47,39 +47,46 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: AppBarPersonalizada(),
+
             drawer: const MenuLateral(),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 15.0,),
-                    const Text("Iniciar Sesión", style: TextStyle(fontSize: 30.0,color: Colors.black,fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15.0,),
-                    _userTextField(),
-                    const SizedBox(height: 15.0,),
-                    _passwordTextField(),
-                    const SizedBox(height: 15.0,),
-                    _botonLogin(),
-                    const SizedBox(height: 15.0,),
-                    _IrAInicioTextField(),
-                    const SizedBox(height: 140.0,),
-                    _crearCuentaTextField(),
-                    const Align(alignment: Alignment.bottomLeft,
-                      child: Text("Recuperar Contraseña...",
-                        style: TextStyle(fontSize: 15.0, color: Colors.grey),),
-                    ),
-                  ],
+            body: CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  title: Text("Iniciar Sesión"),
+                  floating: true,
+                  expandedHeight: 210.0,
+                  backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+                  flexibleSpace: AppBarPersonalizada(),
                 ),
-              ),
-            )
-
-
-        )
-    );
-
-
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 15.0,),
+                        _userTextField(),
+                        const SizedBox(height: 15.0,),
+                        _passwordTextField(),
+                        const SizedBox(height: 15.0,),
+                        _botonLogin(),
+                        const SizedBox(height: 15.0,),
+                        _IrAInicioTextField(),
+                        const SizedBox(height: 1540.0,),
+                              _crearCuentaTextField(),
+                          const Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              "Recuperar Contraseña...",
+                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ));
   }
 
   Widget _userTextField() {

@@ -38,6 +38,7 @@ dependencies:
   image_picker: ^1.0.4   #subir imagenes desde la galeria y/o camara
   http: ^1.1.0           #para poder usar la apí
   shared_preferences: ^2.2.1   #para guardar informacion (persistencia de datos)
+  google_maps_flutter: ^2.5.0
 
 
 dev_dependencies:

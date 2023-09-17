@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
+import 'package:repuestos_de_carros_auto_parts/map_ubicaciones.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:repuestos_de_carros_auto_parts/login_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         '/info_page': (context) => InfoProductosPage(), //necesita argumentos
         '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
         '/nueva_categoria_page': (context) => const RegistrarPage(),
+        '/map_ubicaciones_page': (context) => const MapUbicaciones(),
       },
 
       //home: const MyHomePage(title: 'Flutter Demoo Home Page'),
@@ -172,8 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           const SizedBox(height: 30.0,), //espacio superior de la imagen
                           InkWell(
                             onTap: () {
-                              //Navigator.pushNamed(context, '/ubicaciones'); // Navegar a la página Sucursal2
-                              debugPrint("imagen ubicaciones presionado");
+                              Navigator.pushNamed(context, '/map_ubicaciones_page'); // Navegar a la página Sucursal2
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -263,8 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       const SizedBox(height: 50.0,), //espacio superior de la imagen
                       InkWell(
                         onTap: () {
-                          //Navigator.pushNamed(context, '/ubicaciones'); // Navegar a la página Sucursal2
-                          debugPrint("imagen ubicaciones presionado");
+                          Navigator.pushNamed(context, '/map_ubicaciones_page'); // Navegar a la página Sucursal2
                         },
                         child: Container(
                           decoration: BoxDecoration(
