@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
             body: CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
-                  title: Text("Iniciar Sesión"),
+                  title: Text(""),
                   floating: true,
                   expandedHeight: 210.0,
                   backgroundColor: const Color.fromARGB(255, 238, 238, 238),
@@ -64,6 +64,8 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 15.0,),
+                        Text("Iniciar Sesión", style: TextStyle(fontSize: 32),),
+                        const SizedBox(height: 15.0,),
                         _userTextField(),
                         const SizedBox(height: 15.0,),
                         _passwordTextField(),
@@ -71,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                         _botonLogin(),
                         const SizedBox(height: 15.0,),
                         _IrAInicioTextField(),
-                        const SizedBox(height: 1540.0,),
+                        const SizedBox(height: 15.0,),
                               _crearCuentaTextField(),
                           const Align(
                             alignment: Alignment.bottomLeft,
