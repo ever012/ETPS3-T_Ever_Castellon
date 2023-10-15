@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/info_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,49 +43,44 @@ class ProductosPage extends StatefulWidget {
 
 class _ProductosPageState extends State<ProductosPage> {
   TextEditingController _searchController = TextEditingController();
-  List<String> productos = [
-    "Filtro Aire",
-    "Filtro Combustible",
-    "Filtro de Cabina",
-    "Filtro de Aceite",
-    "Filtro de Transmision",
-    "Filtro Trampa Agua",
-    "Filtro PVC",
-  ];
-
-  List<String> descripciones = [
-    "Descripción del producto 1",
-    "Descripción del producto 2",
-    "Descripción del producto 3",
-    "Descripción del producto 4",
-    "Descripción del producto 5",
-    "Descripción del producto 6",
-    "Descripción del producto 7",
-  ];
-
-  List<String> precios = [
-    "57.50",
-    "57.50",
-    "10.50",
-    "80.50",
-    "50.50",
-    "40.00",
-    "57.00",
-  ];
-
-  List<String> filteredProductos = [];
+  List<Map<String, dynamic>> filteredProductos = [];
 
   @override
   void initState() {
     super.initState();
-    filteredProductos = productos;
+    _fetchProductos().then((productos) {
+      setState(() {
+        filteredProductos = productos;
+      });
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchProductos() async {
+    final response = await http.get(Uri.parse('https://apirepuestoscarros20231008001529.azurewebsites.net/api/producto/listaProducto'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<Map<String, dynamic>> productos = [];
+
+      for (var producto in data) {
+        productos.add({
+          'nombre': producto['nombre'],
+          'descripcion': producto['descripcion'],
+          'precio': producto['precio'].toString(),
+          'imagen': producto['image'] ?? 'ruta_de_imagen_predeterminada',
+        });
+      }
+
+      return productos;
+    } else {
+      throw Exception('Failed to load products');
+    }
   }
 
   void _filterProductos(String query) {
     setState(() {
-      filteredProductos = productos
-          .where((producto) =>
-          producto.toLowerCase().contains(query.toLowerCase()))
+      filteredProductos = filteredProductos
+          .where((producto) => producto['nombre'].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -95,13 +90,13 @@ class _ProductosPageState extends State<ProductosPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          foregroundColor: Colors.black, //color de los iconos
-          backgroundColor: Colors.white,  //backround del appBar(menu)
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
           title: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.white,
-                border: Border.all(color: Color(0xff95A4BB),style: BorderStyle.solid,width: 1.0)
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,
+              border: Border.all(color: Color(0xff95A4BB), style: BorderStyle.solid, width: 1.0),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
@@ -112,11 +107,11 @@ class _ProductosPageState extends State<ProductosPage> {
                     controller: _searchController,
                     onChanged: _filterProductos,
                     decoration: InputDecoration(
-                      hintText: "Buscar sucursal...",
+                      hintText: "Buscar producto...",
                       border: InputBorder.none,
                     ),
-                    textCapitalization: TextCapitalization.none, // Acepta mayúsculas y minúsculas
-                    autofocus: false, // Quita el enfoque automático
+                    textCapitalization: TextCapitalization.none,
+                    autofocus: false,
                   ),
                 ),
                 if (_searchController.text.isNotEmpty)
@@ -125,7 +120,7 @@ class _ProductosPageState extends State<ProductosPage> {
                     onPressed: () {
                       setState(() {
                         _searchController.clear();
-                        filteredProductos = productos;
+                        filteredProductos = [];
                       });
                     },
                   ),
@@ -133,103 +128,83 @@ class _ProductosPageState extends State<ProductosPage> {
             ),
           ),
         ),
-        drawer: const MenuLateral(),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 350,
-                  decoration: BoxDecoration(
-                    color: Color(0xffECF5F8),
-                    border: Border.all(color: Color(0xff223335)),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0,vertical: 5.0), // Espacio alrededor del texto
-                    child: const Text(
-                      "Productos...",
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        color: Color(0xffD64747), // Texto en color blanco
-                      ),
-                    ),
+        body: FutureBuilder<List<Map<String, dynamic>>>(
+          future: _fetchProductos(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text('No se encontraron productos.'));
+            } else {
+              List<Map<String, dynamic>> productos = snapshot.data!;
+              return SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      ...productos
+                          .where((producto) =>
+                          producto['nombre']
+                              .toLowerCase()
+                              .contains(_searchController.text.toLowerCase()))
+                          .map(
+                            (producto) => CardProducto(
+                          imagen: producto['imagen'],
+                          nombre: producto['nombre'],
+                          descripcion: producto['descripcion'],
+                          precio: producto['precio'],
+                        ),
+                      )
+                          .toList(),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20), // Espacio entre el texto y los productos
-                ...filteredProductos
-                    .asMap()
-                    .entries
-                    .map(
-                      (entry) => CardProducto(
-                    imagen: "assets/imagenes/tienda_1.png",
-                    texto: entry.value,
-                    descripcion: descripciones[entry.key], // Usamos la lista de descripciones
-                    precio: precios[entry.key], // Usamos la lista de precios
-                  ),
-                )
-                    .toList(),
-              ],
-            ),
-          ),
+              );
+            }
+          },
         ),
       ),
     );
   }
 }
 
-
-
-
-
-  class CardProducto extends StatelessWidget {
+class CardProducto extends StatelessWidget {
   final String imagen;
-  final String texto;
+  final String nombre;
   final String descripcion;
   final String precio;
 
-  const CardProducto({super.key, String? imagen, String? texto, String? descripcion, String? precio})  //en caso de no introducir los parametros
-      : imagen = imagen ?? "assets/imagenes/tienda_1.png", //valor por de
-        texto = texto ?? "TEXTO LEATORIO",
-        descripcion = descripcion ?? "0",
-        precio = precio ?? "0";
+  const CardProducto({Key? key, required this.imagen, required this.nombre, required this.descripcion, required this.precio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      surfaceTintColor: Colors.white, //background
+      surfaceTintColor: Colors.white,
       clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0),),
-        side: BorderSide(color: Colors.black, width: 1.0,), //grosor y color de los bordes
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        side: BorderSide(color: Colors.black, width: 1.0),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 1),
-
-      // Con esta propiedad agregamos elevación a nuestro card
-      // La sombra que tiene el Card aumentará
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 1),
       elevation: 5,
-
-    // Envolver el contenido de la Card con InkWell para detectar el clic
       child: InkWell(
         splashColor: const Color.fromARGB(255, 71, 73, 73),
         onTap: () {
-          Navigator.pushNamed(context,"/info_page",arguments: {'id': "1","nombre":texto,"precio":precio},
-          );
+          Navigator.pushNamed(context, "/info_page", arguments: {'nombre': nombre, 'precio': precio});
         },
         child: SizedBox(
           width: 340,
           child: Column(
             children: <Widget>[
-
-              // Usamos ListTile para ordenar la información del card como titulo, subtitulo e icono
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(1, 1, 5, 0),
-                title: Text(texto),
+                title: Text(nombre),
                 subtitle: Text(descripcion),
-                leading: Image.asset(imagen),
+                leading: Image.network(imagen),
               ),
-
-              // Usamos una fila para ordenar los botones del card
               Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: Row(
@@ -246,8 +221,6 @@ class _ProductosPageState extends State<ProductosPage> {
     );
   }
 }
-
-
 
 
 
