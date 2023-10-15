@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/info_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
@@ -56,7 +58,7 @@ class _ProductosPageState extends State<ProductosPage> {
   }
 
   Future<List<Map<String, dynamic>>> _fetchProductos() async {
-    final response = await http.get(Uri.parse('https://apirepuestoscarros20231008001529.azurewebsites.net/api/producto/listaProducto'));
+    final response = await http.get(Uri.parse('http://192.168.1.3:8083/api/producto/listaProducto'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
@@ -67,7 +69,7 @@ class _ProductosPageState extends State<ProductosPage> {
           'nombre': producto['nombre'],
           'descripcion': producto['descripcion'],
           'precio': producto['precio'].toString(),
-          'imagen': producto['image'] ?? 'ruta_de_imagen_predeterminada',
+          'imagen': producto['image'],
         });
       }
 
@@ -152,7 +154,7 @@ class _ProductosPageState extends State<ProductosPage> {
                               .contains(_searchController.text.toLowerCase()))
                           .map(
                             (producto) => CardProducto(
-                          imagen: producto['imagen'],
+                          imagen: producto['imagen'] ?? 'https://i.ibb.co/bPcw0ZQ/tienda-1.png',
                           nombre: producto['nombre'],
                           descripcion: producto['descripcion'],
                           precio: producto['precio'],
@@ -172,7 +174,7 @@ class _ProductosPageState extends State<ProductosPage> {
 }
 
 class CardProducto extends StatelessWidget {
-  final String imagen;
+  final dynamic imagen;
   final String nombre;
   final String descripcion;
   final String precio;
@@ -181,6 +183,22 @@ class CardProducto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget imageWidget;
+
+    if (imagen != null && imagen.isNotEmpty) {
+      if (imagen.startsWith('http')) {
+        // Si la imagen es una URL, carga la imagen desde la red
+        imageWidget = Image.network(imagen, width: 80, height: 80, fit: BoxFit.cover);
+      } else {
+        // Si la imagen está en formato Base64, decodifica y muestra la imagen
+        Uint8List bytes = base64.decode(imagen);
+        imageWidget = Image.memory(bytes, width: 80, height: 80, fit: BoxFit.cover);
+      }
+    } else {
+      // Si no hay imagen, muestra una imagen predeterminada
+      imageWidget = Image.asset('assets/imagenes/logoautoparts.png', width: 80, height: 80, fit: BoxFit.cover);
+    }
+
     return Card(
       surfaceTintColor: Colors.white,
       clipBehavior: Clip.hardEdge,
@@ -203,7 +221,10 @@ class CardProducto extends StatelessWidget {
                 contentPadding: const EdgeInsets.fromLTRB(1, 1, 5, 0),
                 title: Text(nombre),
                 subtitle: Text(descripcion),
-                leading: Image.network(imagen),
+                leading: SizedBox(
+                  width: 80,
+                  child: imageWidget,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 20.0),
