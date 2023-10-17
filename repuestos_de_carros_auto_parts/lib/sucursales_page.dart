@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -36,29 +38,45 @@ class SucursalesPage extends StatefulWidget {
 
 class _SucursalesPageState extends State<SucursalesPage> {
   TextEditingController _searchController = TextEditingController();
-  List<String> sucursales = [
-    "COLONIA ESCALON",
-    "SANTA TECLA",
-    "29 AV. NORTE",
-    "APOPA",
-    "CHALATENANGO",
-    "SAN BENITO",
-    "AHUACHAPAN",
-  ];
-
-  List<String> filteredSucursales = [];
+  List<Map<String, dynamic>> sucursales = [];
+  List<Map<String, dynamic>> filteredSucursales = [];
 
   @override
   void initState() {
     super.initState();
-    filteredSucursales = sucursales;
+    _fetchSucursales().then((sucursalesData) {
+      setState(() {
+        sucursales = sucursalesData;
+        filteredSucursales = sucursales;
+      });
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchSucursales() async {
+    final response = await http.get(Uri.parse('http://192.168.1.3:8083/api/sucursal/listaSucursal'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<Map<String, dynamic>> sucursalesList = [];
+
+      for (var sucursal in data) {
+        sucursalesList.add({
+          'nombre': sucursal['nombre'],
+          'id_sucursal': sucursal['id_sucursal']
+        });
+      }
+
+      return sucursalesList;
+    } else {
+      throw Exception('Failed to load sucursales');
+    }
   }
 
   void _filterSucursales(String query) {
     setState(() {
       filteredSucursales = sucursales
           .where((sucursal) =>
-          sucursal.toLowerCase().contains(query.toLowerCase()))
+          sucursal['nombre'].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -112,7 +130,7 @@ class _SucursalesPageState extends State<SucursalesPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: filteredSucursales
-                  .map((texto) => CardSucursal(imagen: "assets/imagenes/tienda_1.png", texto: texto,))
+                  .map((texto) => CardSucursal(imagen: "assets/imagenes/tienda_1.png", texto: texto['nombre'], id: texto['id_sucursal']))
                   .toList(),
             ),
           ),
@@ -125,8 +143,9 @@ class _SucursalesPageState extends State<SucursalesPage> {
 class CardSucursal extends StatelessWidget {
   final String imagen;
   final String texto;
+  final int id;
 
-  const CardSucursal({Key? key, required this.imagen, required this.texto})
+  const CardSucursal({Key? key, required this.imagen, required this.texto, required this.id})
       : super(key: key);
 
   @override
@@ -140,8 +159,8 @@ class CardSucursal extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.black, //color que aparece al dar clic a una sucursal
         onTap: () {
-          Navigator.pushNamed(context, "/productos_page",
-              arguments: {'sucursal': texto});
+          Navigator.pushNamed(context, "/productos_x_id_page",
+              arguments: {'sucursal': id.toString()});
         },
         child: SizedBox(
           width: 300,

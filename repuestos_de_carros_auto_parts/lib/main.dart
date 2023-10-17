@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
 import 'package:repuestos_de_carros_auto_parts/map_ubicaciones.dart';
+import 'package:repuestos_de_carros_auto_parts/productos_x_id_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:repuestos_de_carros_auto_parts/login_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         //LoginPage.id: (context) => LoginPage(), //segundo forma de hacerlo
         '/sucursales_Page': (context) => const SucursalesPage(),
         '/productos_page': (context) => const ProductosPage(), //sucursal especifica
+        '/productos_x_id_page': (context) => const ProductosXID(), //sucursal especifica
         //'/Todos_productos_page': (context) => const TodosProductosPage(), //todos los que existan
         '/nuevo_producto_page': (context) => const NuevoProductoPage(), //quitar al terminar
         '/nueva_sucursal_page': (context) => const NuevaSucursalPage(), //quitar al terminar
