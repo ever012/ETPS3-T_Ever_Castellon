@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         '/ubicaciones_page': (context) => const UbicacionesPage(), //quitar al terminar
         '/roles_page': (context) => const RolesPage(), //quitar al terminar
         '/usuarios_page': (context) => const UsuariosPage(),
-        '/info_page': (context) => InfoProductosPage(), //necesita argumentos
+        '/info_page': (context) => InfoProductosPage(productoId: '123'), //necesita argumentos
         '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
         '/nueva_categoria_page': (context) => const RegistrarPage(),
         '/map_ubicaciones_page': (context) => const MapUbicaciones(),

@@ -1,5 +1,8 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // Necesario para decodificar el JSON
 
 
 void main() {
@@ -23,121 +26,184 @@ class MyApp extends StatelessWidget {
       ),
 
       routes: {
-        '/': (context) => InfoProductosPage(),
+        '/': (context) => InfoProductosPage(productoId: ''),
 
       },
+
 
       //home: const MyHomePage(title: 'Flutter Demoo Home Page'),
     );
   }
 }
 
+class InfoProductosPage extends StatefulWidget {
+  final String productoId; // Define el parámetro productoId
 
-class InfoProductosPage extends StatelessWidget {
+  InfoProductosPage({required this.productoId}); // Constructor que acepta productoId
+
   @override
-  Widget build(BuildContext context) {
+  _InfoProductosPageState createState() => _InfoProductosPageState();
+}
 
+class _InfoProductosPageState extends State<InfoProductosPage> {
+  Future<Map<String, dynamic>> _fetchProducto() async {
+    debugPrint("IDDDDDD:"+widget.productoId);
+    final response = await http.get(
+        Uri.parse('http://192.168.1.3:8083/api/producto/productoId?id=${widget.productoId}'));
 
-    Map<dynamic, dynamic>? parametros = ModalRoute.of(context)?.settings.arguments as Map<dynamic, dynamic>?; //obtener todos los argumentos
-    // Comprueba si los argumentos son no nulos y del tipo esperado
-    if (parametros != null && parametros.containsKey('id') && parametros.containsKey('nombre') && parametros.containsKey('precio')) {
-      final String id = parametros['id'] as String;
-      final String nombre = parametros['nombre'] as String;
-      final String precio = parametros['precio'] as String;
-      return Scaffold(
-          appBar: AppBar(),
-          drawer: const MenuLateral(), //solo agregar esta linea para agregar el menu desplegable
-          body: SingleChildScrollView( //este metodo permite que el contenido sea desplazable si ocupa más espacio vertical del disponible.
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 350,
-                    decoration: BoxDecoration(
-                      color: Color(0xffECF5F8),
-                      border: Border.all(color: Color(0xff223335)),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0,vertical: 5.0), // Espacio alrededor del texto
-                      child: const Text("Informacion General",
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Color(0xffD64747), // Texto en color blanco
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-              InkWell(
-                onTap: () {debugPrint("redirige al google maps 😀");},
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.asset('assets/Iconos/imagen_uno.png',
-                      width: 310.0, height: 310.0),
-                ),
-              ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
-                      child: Text(nombre,style: TextStyle(fontSize: 24),),
-                    ),
-                  ),
-                  const Divider(
-                    height: 10,
-                    thickness: 1,
-                    indent: 10,
-                    endIndent: 10,
-                    color: Colors.black,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),//left, top, right, bottom
-                      child: Text("\$$precio",style: TextStyle(fontSize: 24,color: Color(0xffD64747)),),
-                    ),
-                  ),
-                  const Divider(
-                    height: 10,
-                    thickness: 1,
-                    indent: 10,
-                    endIndent: 10,
-                    color: Colors.black,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
-                      child: Text("DESCRIPCIÓN",style: TextStyle(fontSize: 24,color: Color(0xff95A4BB)),),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
-                    child: Text("La función del filtro de combustible en motores que funcionan con gasolina es distinta a la de los que lo hacen con diésel. No obstante, en cualquiera de los dos casos actúa como barrera para que las impurezas lleguen al circuito de inyección, a la bomba de presión, a los inyectores o al circuito de alimentación.",
-                      style: TextStyle(fontSize: 15,color: Color(0xff95A4BB)),),
-                  )
-                ],
-              ),
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load product details');
+    }
+  }
 
-            ),
-          )
-      );
-
-    }else {
-      // En caso de que los argumentos no sean válidos, muestra un mensaje de error o regresa a la página anterior
-      return Scaffold(
-        appBar: AppBar(title: Text('Error')),
-        body: Center(
-          child: Text('Error al recibir los argumentos'),
-
-        ),
+  Widget _buildImageWidget(String imageUrl) {
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      if (imageUrl.startsWith('http')) {
+        // Si la imagen es una URL, carga la imagen desde la red
+        return Image.network(
+          imageUrl,
+          width: 100.0,
+          height: 100.0,
+          fit: BoxFit.cover,
+        );
+      } else {
+        // Si la imagen está en formato Base64, decodifica y muestra la imagen
+        Uint8List bytes = base64.decode(imageUrl);
+        return Image.memory(
+          bytes,
+          width: 100.0,
+          height: 100.0,
+          fit: BoxFit.cover,
+        );
+      }
+    } else {
+      // Si no hay imagen o es nula, muestra una imagen predeterminada
+      return Image.asset(
+        'assets/imagenes/tienda_1.png',
+        width: 100.0,
+        height: 100.0,
+        fit: BoxFit.cover,
       );
     }
   }
-}
 
+
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    Widget imageWidget;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalles del Producto'),
+      ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _fetchProducto(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No se encontraron detalles del producto.'));
+          } else {
+            Map<String, dynamic> producto = snapshot.data!;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 350,
+                      decoration: BoxDecoration(
+                        color: Color(0xffECF5F8),
+                        border: Border.all(color: Color(0xff223335)),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                        child: const Text(
+                          "Informacion General",
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            color: Color(0xffD64747),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+                    producto['image'] != null && producto['image'].isNotEmpty
+                        ? _buildImageWidget(producto['image'])
+                        : Center(
+                          child: Image.asset("assets/imagenes/tienda_1.png",width: 100.0,height: 100.0,fit: BoxFit.cover,),
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                        child: Text(producto['nombre'], style: TextStyle(fontSize: 24)),
+                      ),
+                    ),
+
+                    const Divider(
+                      height: 10,
+                      thickness: 1,
+                      indent: 10,
+                      endIndent: 10,
+                      color: Colors.black,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
+                        child: Text("\$${producto['precio']}",
+                          style: TextStyle(fontSize: 24, color: Color(0xffD64747)),
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      height: 10,
+                      thickness: 1,
+                      indent: 10,
+                      endIndent: 10,
+                      color: Colors.black,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                        child: Text(
+                          "DESCRIPCIÓN",
+                          style: TextStyle(fontSize: 24, color: Color(0xff95A4BB)),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      child: Text(
+                        producto['descripcion'],
+                        style: TextStyle(fontSize: 15, color: Color(0xff95A4BB)),
+                      ),
+                    ),
+
+
+                  ],
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
 
 

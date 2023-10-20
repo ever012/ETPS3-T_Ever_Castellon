@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/': (context) => const ProductosPage(),
-        '/info_page': (context) => InfoProductosPage(),
 
       },
 
