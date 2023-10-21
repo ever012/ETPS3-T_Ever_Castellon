@@ -3,6 +3,9 @@ import 'package:repuestos_de_carros_auto_parts/appBar.dart';
 import 'package:repuestos_de_carros_auto_parts/main.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'api_config.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = "login_page";
@@ -23,8 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     passwordVisible = true;
-    _emailController = TextEditingController(text: "correoadmin@gmail.com");
-    _passwordController = TextEditingController(text: "123456");
+    _emailController = TextEditingController(text: "ever");
+    _passwordController = TextEditingController(text: "123456789");
     SharedPreferences.getInstance().then((prefs) {
       _prefs = prefs;
     });
@@ -99,12 +102,12 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _emailController,
-              keyboardType: TextInputType.emailAddress, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/correo.png'),
-                hintText: 'Usuario/Correo',
-                labelText: 'Correo electronico',
+                hintText: 'Usuario',
+                labelText: 'Usuario',
                 labelStyle: TextStyle(color: Colors.black),
 
                 focusColor: Colors.teal,
@@ -225,15 +228,34 @@ class _LoginPageState extends State<LoginPage> {
               if (_emailController.text == "" || _passwordController.text == "") {
                 _showNotification('Ingrese correo y/o contraseña');
               } else {
-                if (_emailController.text == 'correoadmin@gmail.com' &&
-                    _passwordController.text == '123456') {
-                  _showNotification('Datos correctos Admin');
+                // Construir el cuerpo de la solicitud POST
+                Map<String, dynamic> body = {
+                  'usuario': _emailController.text,
+                  'password': _passwordController.text,
+                };
 
-                  // Guardar en SharedPreferences
-                  await _prefs.setInt('id', 1);
-                  await _prefs.setString('nombre', 'José');
+                // Realizar la solicitud POST a la API
+                var response = await http.post(Uri.parse('${ApiConfig.apiUrl}api/login'),
+                    body: json.encode(body),
+                    headers: {'Content-Type': 'application/json'});
 
-                  Navigator.pushNamed(context, '/', arguments: {'id': 1, 'nombre': 'José'});
+                // Verificar el código de estado de la respuesta
+                if (response.statusCode == 200) {
+                  // Analizar la respuesta JSON
+                  var jsonResponse = json.decode(response.body);
+
+                  // Guardar el token y el usuario en SharedPreferences
+                  await _prefs.setString('token', jsonResponse['token']);
+                  await _prefs.setString('usuario', jsonResponse['usuario']);
+
+                  _showNotification('Inicio de sesión exitoso');
+
+                  // Navegar a la página principal con los datos del usuario
+                  Navigator.pushNamed(context, '/', arguments: {
+                    'id': 1,
+                    'nombre': jsonResponse['usuario'],
+                    'token': jsonResponse['token'],
+                  });
                 } else {
                   _showNotification('Credenciales incorrectas');
                 }

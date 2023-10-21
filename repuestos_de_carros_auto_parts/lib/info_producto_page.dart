@@ -2,7 +2,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // Necesario para decodificar el JSON
+import 'dart:convert';
+
+import 'api_config.dart'; // Necesario para decodificar el JSON
 
 
 void main() {
@@ -49,7 +51,7 @@ class _InfoProductosPageState extends State<InfoProductosPage> {
   Future<Map<String, dynamic>> _fetchProducto() async {
     debugPrint("IDDDDDD:"+widget.productoId);
     final response = await http.get(
-        Uri.parse('http://192.168.1.3:8083/api/producto/productoId?id=${widget.productoId}'));
+        Uri.parse('${ApiConfig.apiUrl}api/producto/productoId?id=${widget.productoId}'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);

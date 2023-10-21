@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
+
+import 'api_config.dart';
 
 class RegistrarPage extends StatefulWidget {
   static String id = "login_page";
@@ -12,18 +16,18 @@ class RegistrarPage extends StatefulWidget {
 }
 
 class _RegistrarPageState extends State<RegistrarPage> {
+  late TextEditingController _userController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   bool passwordVisible=false;
-  bool passwordVisible2=false;
 
   @override
   void initState() {
     super.initState();
     passwordVisible=true;
-    passwordVisible2=false;
+    _userController = TextEditingController(text: "ever");
     _emailController = TextEditingController(text: "correo@gmail.com");
-    _passwordController = TextEditingController(text: "123456");
+    _passwordController = TextEditingController(text: "123456789");
   }
 
   @override
@@ -64,7 +68,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
                     const SizedBox(height: 15.0,),
                     _passwordTextField(),
                     const SizedBox(height: 15.0,),
-                    _repetirPasswordTextField(),
+                    _EmailTextField(),
                     const SizedBox(height: 15.0,),
                     _botonRegistrar(),
                     const SizedBox(height: 15.0,),
@@ -87,8 +91,8 @@ class _RegistrarPageState extends State<RegistrarPage> {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress, //pone por defecto el teclado con arroba y demas
+              controller: _userController,
+              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/correo.png'),
@@ -102,9 +106,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
 
                 ),
               ),
-
               onChanged: (value) {},
-
             ),
           );
         });
@@ -150,33 +152,20 @@ class _RegistrarPageState extends State<RegistrarPage> {
 
 
 
-  Widget _repetirPasswordTextField() {
+  Widget _EmailTextField() {
     return StreamBuilder(
         stream: null,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
-              //controller: _password2Controller,
-              keyboardType: TextInputType.text,
-              obscureText: passwordVisible2,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/candado.png'),
-                suffixIcon: IconButton(
-                  icon: Icon(passwordVisible2
-                      ? Icons.visibility
-                      : Icons.visibility_off),
-                  onPressed: () {
-                    setState(
-                          () {
-                        passwordVisible2 = !passwordVisible2;
-                      },
-                    );
-                  },
-                ),
-                hintText: 'Confirmar Contraseña',
-                labelText: 'Confirmar Contraseña',
+                hintText: 'Email',
+                labelText: 'Email',
                 labelStyle: TextStyle(color: Colors.black),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
@@ -207,8 +196,32 @@ class _RegistrarPageState extends State<RegistrarPage> {
 
           return ElevatedButton(
             style: raisedButtonStyle,
-            onPressed: (){
-              _showNotification("Listo!, registrado 😋");
+            onPressed: () async {
+              if (_emailController.text == "" || _passwordController.text == "") {
+                _showNotification('Ingrese correo y/o contraseña');
+              } else {
+                // Obtener el usuario y la contraseña del controlador de texto
+                String usuario = _userController.text;
+                String password = _passwordController.text;
+                String email = _emailController.text;
+
+                // Construir el URI de la solicitud POST con los parámetros
+                var uri = Uri.parse('${ApiConfig.apiUrl}api/login/registroUsuario?usuario=$usuario&password=$password&email=$email');
+
+                // Realizar la solicitud POST a la API
+                var response = await http.post(uri, headers: {'Content-Type': 'application/json'});
+debugPrint("HOLAAA:" +uri.toString());
+                // Verificar el código de estado de la respuesta
+                if (response.statusCode == 200) {
+                  // Analizar la respuesta JSON
+                  var jsonResponse = response.body;
+                  _showNotification('USUARIO CREADO CORRECTAMENTE');
+                  // Navegar a la página principal con los datos del usuario
+                  Navigator.pushNamed(context, '/login_page');
+                } else {
+                  _showNotification('Credenciales incorrectas');
+                }
+              }
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),

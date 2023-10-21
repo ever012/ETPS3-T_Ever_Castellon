@@ -84,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _loadSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int? idShared = prefs.getInt('id');
-    final String? nombreShared = prefs.getString('nombre');
+    final String? tokenShared = prefs.getString('token');
+    final String? nombreShared = prefs.getString('usuario');
 
     setState(() {
       nombre = nombreShared;

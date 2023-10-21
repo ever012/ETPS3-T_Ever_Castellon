@@ -6,6 +6,8 @@ import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'api_config.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -57,7 +59,7 @@ class _ProductosPageState extends State<ProductosPage> {
   }
 
   Future<List<Map<String, dynamic>>> _fetchProductos() async {
-    final response = await http.get(Uri.parse('http://192.168.1.3:8083/api/producto/listaProducto'));
+    final response = await http.get(Uri.parse('${ApiConfig.apiUrl}api/producto/listaProducto'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
