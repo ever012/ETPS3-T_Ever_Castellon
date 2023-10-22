@@ -47,14 +47,12 @@ class MyApp extends StatelessWidget {
         '/sucursales_Page': (context) => const SucursalesPage(),
         '/productos_page': (context) => const ProductosPage(), //sucursal especifica
         '/productos_x_id_page': (context) => const ProductosXID(), //sucursal especifica
-        //'/Todos_productos_page': (context) => const TodosProductosPage(), //todos los que existan
         '/nuevo_producto_page': (context) => const NuevoProductoPage(), //quitar al terminar
         '/nueva_sucursal_page': (context) => const NuevaSucursalPage(), //quitar al terminar
-        '/ubicaciones_page': (context) => const UbicacionesPage(), //quitar al terminar
         '/roles_page': (context) => const RolesPage(), //quitar al terminar
         '/usuarios_page': (context) => const UsuariosPage(),
         '/info_page': (context) => InfoProductosPage(productoId: '123'), //necesita argumentos
-        '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
+        '/nueva_ubicacion_page': (context) => UbicacionesPage(),
         '/nueva_categoria_page': (context) => const RegistrarPage(),
         '/map_ubicaciones_page': (context) => const MapUbicaciones(),
       },

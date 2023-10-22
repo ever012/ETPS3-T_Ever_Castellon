@@ -49,7 +49,6 @@ class InfoProductosPage extends StatefulWidget {
 
 class _InfoProductosPageState extends State<InfoProductosPage> {
   Future<Map<String, dynamic>> _fetchProducto() async {
-    debugPrint("IDDDDDD:"+widget.productoId);
     final response = await http.get(
         Uri.parse('${ApiConfig.apiUrl}api/producto/productoId?id=${widget.productoId}'));
 
