@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:repuestos_de_carros_auto_parts/info_producto_page.dart';
-import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +36,14 @@ class MyApp extends StatelessWidget {
 }
 
 class ProductosPage extends StatefulWidget {
-  const ProductosPage({Key? key});
+  const ProductosPage({super.key});
 
   @override
   _ProductosPageState createState() => _ProductosPageState();
 }
 
 class _ProductosPageState extends State<ProductosPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> filteredProductos = [];
 
   @override
@@ -99,17 +97,17 @@ class _ProductosPageState extends State<ProductosPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.white,
-              border: Border.all(color: Color(0xff95A4BB), style: BorderStyle.solid, width: 1.0),
+              border: Border.all(color: const Color(0xff95A4BB), style: BorderStyle.solid, width: 1.0),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                Icon(Icons.search),
+                const Icon(Icons.search),
                 Expanded(
                   child: TextField(
                     controller: _searchController,
                     onChanged: _filterProductos,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Buscar producto...",
                       border: InputBorder.none,
                     ),
@@ -119,7 +117,7 @@ class _ProductosPageState extends State<ProductosPage> {
                 ),
                 if (_searchController.text.isNotEmpty)
                   IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       setState(() {
                         _searchController.clear();
@@ -135,11 +133,11 @@ class _ProductosPageState extends State<ProductosPage> {
           future: _fetchProductos(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No se encontraron productos.'));
+              return const Center(child: Text('No se encontraron productos.'));
             } else {
               List<Map<String, dynamic>> productos = snapshot.data!;
               return SingleChildScrollView(
@@ -203,7 +201,7 @@ class CardProducto extends StatelessWidget {
     return Card(
       surfaceTintColor: Colors.white,
       clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         side: BorderSide(color: Colors.black, width: 1.0),
       ),

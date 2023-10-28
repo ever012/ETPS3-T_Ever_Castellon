@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'api_config.dart';
 
 
 void main() {
@@ -34,14 +38,49 @@ class MyApp extends StatelessWidget {
 }
 
 
-class CategoriasPage extends StatelessWidget {
+class CategoriasPage extends StatefulWidget {
   const CategoriasPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController codigoController = TextEditingController();
-    final TextEditingController rolController = TextEditingController();
+  _CategoriasPageState createState() => _CategoriasPageState();
+}
 
+class _CategoriasPageState extends State<CategoriasPage> {
+final TextEditingController _idController = TextEditingController();
+final TextEditingController _codigoController = TextEditingController();
+final TextEditingController _nombreController = TextEditingController();
+String ubicacionDropdownValue = 'Seleccione Ubicación';
+String? nombreUsuario;
+String? tokenCompartido;
+
+
+// Crear una notificación en la parte inferior de la app
+void _showNotification(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
+
+@override
+void initState() {
+  super.initState();
+  _loadSharedPreferences();
+}
+
+
+Future<void> _loadSharedPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? tokenShared = prefs.getString('token');
+  final String? nombreShared = prefs.getString('usuario');
+
+  setState(() {
+    nombreUsuario = nombreShared;
+    tokenCompartido = tokenShared;
+  });
+}
+
+@override
+Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(title: const Text("Categoría",style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),),
@@ -53,9 +92,11 @@ class CategoriasPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 30.0,),
+                    _idTextField(),
+                    const SizedBox(height: 30.0,),
                     _codigoTextField(),
                     const SizedBox(height: 15.0,),
-                    _rolTextField(),
+                    _nombreTextField(),
                     const SizedBox(height: 20.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta la alineación según tus necesidades
@@ -72,12 +113,37 @@ class CategoriasPage extends StatelessWidget {
             )
         )
     );
-
-
-
   }
-}
 
+
+  Widget _idTextField() {
+    return StreamBuilder(
+        stream: null,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: TextField(
+              controller: _idController,
+              keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
+                //icon: Icon(Icons.numbers),
+                hintText: 'Id Categoria',
+                labelText: 'Id',
+                labelStyle: TextStyle(color: Colors.black),
+                focusColor: Colors.teal,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+
+                ),
+              ),
+
+              onChanged: (value) {},
+            ),
+          );
+        });
+  }
 
 
 Widget _codigoTextField() {
@@ -87,7 +153,7 @@ Widget _codigoTextField() {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
-            //controller: _codigoController,
+            controller: _codigoController,
             keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -113,49 +179,20 @@ Widget _codigoTextField() {
 
 
 
-Widget _descripcionTextField() {
+Widget _nombreTextField() {
   return StreamBuilder(
       stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
-            //controller: _descripcionController,
+            controller: _nombreController,
             keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),
               hintText: 'Descripcion',
               labelText: 'Descripcion',
-              labelStyle: TextStyle(color: Colors.black),
-              focusColor: Colors.teal,
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
-
-              ),
-            ),
-
-            onChanged: (value) {},
-          ),
-        );
-      });
-}
-
-Widget _rolTextField() {
-  return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: TextField(
-            //controller: _rolController,
-            keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
-              //icon: Icon(Icons.numbers),
-              hintText: 'Ingrese Nombre Rol',
-              labelText: 'Nombre Rol',
               labelStyle: TextStyle(color: Colors.black),
               focusColor: Colors.teal,
               focusedBorder: OutlineInputBorder(
@@ -178,14 +215,45 @@ Widget _botonGuardar() {
     stream: null,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return GestureDetector(
-        onTap: () {
-          print("Me oprimiste ✅");
+        onTap: () async {
+          // valores de los controladores de texto
+          String codigo = _codigoController.text;
+          String nombre = _nombreController.text;
+
+
+          Map<String, dynamic> data = { // datos que quieres enviar al servidor
+            "cod_categoria": codigo,
+            "nombre": nombre,
+          };
+
+
+          String jsonData = jsonEncode(data);// Convierte el mapa a un JSON
+          String apiUrl = "${ApiConfig.apiUrl}api/categoria/crearCategoria";
+
+          // Realiza la solicitud HTTP POST con el encabezado de autorización
+          var response = await http.post(
+            Uri.parse(apiUrl),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $tokenCompartido",
+            },
+            body: jsonData,
+          );
+
+          // Verifica el estado de la respuesta
+          if (response.statusCode == 200) {
+            // Si la solicitud fue exitosa, imprime la respuesta del servidor
+            _showNotification("Categoria agregada con éxito: ${response.body}");
+          } else {
+            // Si la solicitud falla, imprime el código de estado
+            _showNotification("Error al agregar la Categoria. Código de estado: ${response.statusCode}");
+          }
         },
         child: Container(
           width: 80.0, // Ajusta el ancho según tus necesidades
           height: 80.0, // Ajusta el alto según tus necesidades
           decoration: BoxDecoration(
-            color: Color(0xff229743), // Cambia el color de fondo a verde
+            color: const Color(0xff229743), // Cambia el color de fondo a verde
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
@@ -202,14 +270,34 @@ Widget _botonEliminar() {
     stream: null,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return GestureDetector(
-        onTap: () {
-          print("se elimino ❌");
+        onTap: () async {
+          // ID del controlador
+          String id = _idController.text;
+
+          // solicitud DELETE
+          String apiUrl = "${ApiConfig.apiUrl}api/categoria/eliminarCategoria?id=$id";
+          // Realiza la solicitud HTTP DELETE con el encabezado de autorización
+          var response = await http.delete(
+            Uri.parse(apiUrl),
+            headers: {
+              "Authorization": "Bearer $tokenCompartido",
+            },
+          );
+
+          // Verifica el estado de la respuesta
+          if (response.statusCode == 200) {
+            // Si la solicitud fue exitosa, imprime la respuesta del servidor
+            _showNotification("Ubicación eliminada con éxito: ${response.body}");
+          } else {
+            // Si la solicitud falla, imprime el código de estado
+            _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
+          }
         },
         child: Container(
           width: 80.0, // Ajusta el ancho según tus necesidades
           height: 80.0, // Ajusta el alto según tus necesidades
           decoration: BoxDecoration(
-            color: Color(0xffF02121), // Cambia el color de fondo a verde
+            color: const Color(0xffF02121), // Cambia el color de fondo a verde
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
@@ -227,14 +315,49 @@ Widget _botonModificar() {
     stream: null,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return GestureDetector(
-        onTap: () {
-          print("se modifico 🔄");
+        onTap: () async {
+          // Obtén los valores de los controladores de texto
+          String id = _idController.text;
+          String codigo = _codigoController.text;
+          String nombre = _nombreController.text;
+
+          // Crea un mapa con los datos que quieres enviar al servidor
+          Map<String, dynamic> data = {
+            "cod_categoria": codigo,
+            "nombre": nombre,
+          };
+
+          // Convierte el mapa a un JSON
+          String jsonData = jsonEncode(data);
+
+          // URL del endpoint de la API donde deseas enviar los datos
+          String apiUrl = "${ApiConfig.apiUrl}api/categoria/actualizaCategoria?id=$id";
+
+          //  solicitud HTTP PUT con el encabezado de autorización
+          var response = await http.put(
+            Uri.parse(apiUrl),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $tokenCompartido",
+            },
+            body: jsonData,
+          );
+
+          // Verifica el estado de la respuesta
+          if (response.statusCode == 200) {
+            // Si la solicitud fue exitosa, imprime la respuesta del servidor
+            _showNotification("Ubicación agregada con éxito: ${response.body}");
+          } else {
+            // Si la solicitud falla, imprime el código de estado
+            _showNotification("Error al agregar la ubicación. Código de estado: ${response
+                .statusCode}");
+          }
         },
         child: Container(
           width: 80.0, // Ajusta el ancho según tus necesidades
           height: 80.0, // Ajusta el alto según tus necesidades
           decoration: BoxDecoration(
-            color: Color(0xff290BE7), // Cambia el color de fondo a verde
+            color: const Color(0xff290BE7), // Cambia el color de fondo a verde
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
@@ -246,9 +369,7 @@ Widget _botonModificar() {
   );
 }
 
-
-
-
+}
 
 
 

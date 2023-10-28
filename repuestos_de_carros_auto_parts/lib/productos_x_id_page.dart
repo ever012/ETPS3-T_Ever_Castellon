@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/info_producto_page.dart';
-import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,7 +12,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +37,14 @@ class MyApp extends StatelessWidget {
 }
 
 class ProductosXID extends StatefulWidget {
-  const ProductosXID({Key? key});
+  const ProductosXID({super.key});
 
   @override
   _ProductosXIDState createState() => _ProductosXIDState();
 }
 
 class _ProductosXIDState extends State<ProductosXID> {
-TextEditingController _searchController = TextEditingController();
+final TextEditingController _searchController = TextEditingController();
 List<Map<String, dynamic>> filteredProductos = [];
 String sucursal = '';
 
@@ -106,17 +105,17 @@ Future<void> obtenerSucursal() async {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.white,
-              border: Border.all(color: Color(0xff95A4BB), style: BorderStyle.solid, width: 1.0),
+              border: Border.all(color: const Color(0xff95A4BB), style: BorderStyle.solid, width: 1.0),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                Icon(Icons.search),
+                const Icon(Icons.search),
                 Expanded(
                   child: TextField(
                     controller: _searchController,
                     onChanged: _filterProductos,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Search producto...",
                       border: InputBorder.none,
                     ),
@@ -126,7 +125,7 @@ Future<void> obtenerSucursal() async {
                 ),
                 if (_searchController.text.isNotEmpty)
                   IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       setState(() {
                         _searchController.clear();
@@ -142,11 +141,11 @@ Future<void> obtenerSucursal() async {
           future: _fetchProductos(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No se encontraron productos.'));
+              return const Center(child: Text('No se encontraron productos.'));
             } else {
               List<Map<String, dynamic>> productos = snapshot.data!;
               return SingleChildScrollView(
@@ -212,7 +211,7 @@ class CardProducto extends StatelessWidget {
     return Card(
       surfaceTintColor: Colors.white,
       clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         side: BorderSide(color: Colors.black, width: 1.0),
       ),
@@ -221,11 +220,11 @@ class CardProducto extends StatelessWidget {
       child: InkWell(
         splashColor: const Color.fromARGB(255, 71, 73, 73),
         onTap: () {
-          debugPrint("primero:"+id_producto);
+          debugPrint("primero:$id_producto");
           Navigator.push(
               context,
               MaterialPageRoute(
-              builder: (context) => InfoProductosPage(productoId: "$id_producto"), // Establece el valor del productoId aquí
+              builder: (context) => InfoProductosPage(productoId: id_producto), // Establece el valor del productoId aquí
               ),
           );
         },

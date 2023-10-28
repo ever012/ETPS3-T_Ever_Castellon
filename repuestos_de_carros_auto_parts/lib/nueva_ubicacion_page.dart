@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_config.dart';
-import 'data/guardar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,13 +24,15 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 238, 238, 238),
       ),
       routes: {
-        '/': (context) => UbicacionesPage(),
+        '/': (context) => const UbicacionesPage(),
       },
     );
   }
 }
 
 class UbicacionesPage extends StatefulWidget {
+  const UbicacionesPage({super.key});
+
   @override
   _UbicacionesPageState createState() => _UbicacionesPageState();
 }
@@ -313,7 +313,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
               Uri.parse(apiUrl),
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZXZlciIsImVtYWlsIjpbImZnYmZnYmZnZmRAZ21haWwuY29tIiwiZmdiZmdiZmdmZEBnbWFpbC5jb20iXSwibmJmIjoxNjk4MDExNDAzLCJleHAiOjE2OTgwMTMyMDMsImlzcyI6ImxvY2FsaG9zdDo3MjA1LyIsImF1ZCI6ImxvY2FsaG9zdDo3MjA1LyJ9.uOm3_kJUUUmYNlDGeR_xQLDiMaIz4usnzxlcqSJqPeA",
+                "Authorization": "Bearer $tokenCompartido",
               },
               body: jsonData,
             );
@@ -321,10 +321,10 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              debugPrint("Ubicación agregada con éxito: ${response.body}");
+              _showNotification("Ubicación agregada con éxito: ${response.body}");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              debugPrint("Error al agregar la ubicación. Código de estado: ${response
+              _showNotification("Error al agregar la ubicación. Código de estado: ${response
                   .statusCode}");
             }
           },
@@ -332,7 +332,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             width: 80.0, // Ajusta el ancho según tus necesidades
             height: 80.0, // Ajusta el alto según tus necesidades
             decoration: BoxDecoration(
-              color: Color(0xff229743), // Cambia el color de fondo a verde
+              color: const Color(0xff229743), // Cambia el color de fondo a verde
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -356,29 +356,29 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
 
             // URL del endpoint de la API donde deseas enviar la solicitud DELETE
             String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/eliminarUbicacion?id=$id";
-            debugPrint("IDDDDDD:"+apiUrl);
+            debugPrint("IDDDDDD:$apiUrl");
             // Realiza la solicitud HTTP DELETE con el encabezado de autorización
             var response = await http.delete(
               Uri.parse(apiUrl),
               headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZXZlciIsImVtYWlsIjpbImZnYmZnYmZnZmRAZ21haWwuY29tIiwiZmdiZmdiZmdmZEBnbWFpbC5jb20iXSwibmJmIjoxNjk4MDEyNDI4LCJleHAiOjE2OTgwMTQyMjgsImlzcyI6ImxvY2FsaG9zdDo3MjA1LyIsImF1ZCI6ImxvY2FsaG9zdDo3MjA1LyJ9.5YWArhhhV2TqnHVGj4XJ_kl4upR0CixQQG6kyegNtwQ",
+                "Authorization": "Bearer $tokenCompartido",
               },
             );
 
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              debugPrint("Ubicación eliminada con éxito: ${response.body}");
+              _showNotification("Ubicación eliminada con éxito: ${response.body}");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              debugPrint("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
+              _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
             width: 80.0, // Ajusta el ancho según tus necesidades
             height: 80.0, // Ajusta el alto según tus necesidades
             decoration: BoxDecoration(
-              color: Color(0xffF02121), // Cambia el color de fondo a verde
+              color: const Color(0xffF02121), // Cambia el color de fondo a verde
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -423,7 +423,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
               Uri.parse(apiUrl),
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZXZlciIsImVtYWlsIjpbImZnYmZnYmZnZmRAZ21haWwuY29tIiwiZmdiZmdiZmdmZEBnbWFpbC5jb20iXSwibmJmIjoxNjk4MDExNDAzLCJleHAiOjE2OTgwMTMyMDMsImlzcyI6ImxvY2FsaG9zdDo3MjA1LyIsImF1ZCI6ImxvY2FsaG9zdDo3MjA1LyJ9.uOm3_kJUUUmYNlDGeR_xQLDiMaIz4usnzxlcqSJqPeA",
+                "Authorization": "Bearer $tokenCompartido",
               },
               body: jsonData,
             );
@@ -431,10 +431,10 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              debugPrint("Ubicación agregada con éxito: ${response.body}");
+              _showNotification("Ubicación modificada con éxito: ${response.body}");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              debugPrint("Error al agregar la ubicación. Código de estado: ${response
+              _showNotification("Error al modificar la ubicación. Código de estado: ${response
                   .statusCode}");
             }
           },
@@ -442,7 +442,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             width: 80.0, // Ajusta el ancho según tus necesidades
             height: 80.0, // Ajusta el alto según tus necesidades
             decoration: BoxDecoration(
-              color: Color(0xff290BE7), // Cambia el color de fondo a verde
+              color: const Color(0xff290BE7), // Cambia el color de fondo a verde
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(

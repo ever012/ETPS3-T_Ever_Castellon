@@ -32,14 +32,14 @@ class MyApp extends StatelessWidget {
 }
 
 class SucursalesPage extends StatefulWidget {
-  const SucursalesPage({Key? key});
+  const SucursalesPage({super.key});
 
   @override
   _SucursalesPageState createState() => _SucursalesPageState();
 }
 
 class _SucursalesPageState extends State<SucursalesPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> sucursales = [];
   List<Map<String, dynamic>> filteredSucursales = [];
 
@@ -94,17 +94,17 @@ class _SucursalesPageState extends State<SucursalesPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.white,
-                border: Border.all(color: Color(0xff95A4BB),style: BorderStyle.solid,width: 1.0)
+                border: Border.all(color: const Color(0xff95A4BB),style: BorderStyle.solid,width: 1.0)
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                Icon(Icons.search),
+                const Icon(Icons.search),
                 Expanded(
                   child: TextField(
                     controller: _searchController,
                     onChanged: _filterSucursales,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Buscar sucursal...",
                       border: InputBorder.none,
                     ),
@@ -114,7 +114,7 @@ class _SucursalesPageState extends State<SucursalesPage> {
                 ),
                 if (_searchController.text.isNotEmpty)
                   IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       setState(() {
                         _searchController.clear();
@@ -155,7 +155,7 @@ class CardSucursal extends StatelessWidget {
     return Card(
       surfaceTintColor: Colors.white, //background
       clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0),),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0),),
         side: BorderSide(color: Colors.black, width: 1.0,), //grosor y color de los bordes
       ),
       child: InkWell(

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
@@ -49,7 +48,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: AppBarPersonalizada(),
+            appBar: const AppBarPersonalizada(),
             drawer: const MenuLateral(),
             body: SingleChildScrollView(
               child: Center(
@@ -94,14 +93,14 @@ class _RegistrarPageState extends State<RegistrarPage> {
               controller: _userController,
               keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/correo.png'),
                 hintText: 'Usuario/Correo',
                 labelText: 'Correo electronico',
-                labelStyle: TextStyle(color: Colors.black),
+                labelStyle: const TextStyle(color: Colors.black),
 
                 focusColor: Colors.teal,
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
 
                 ),
@@ -123,7 +122,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
               keyboardType: TextInputType.text,
               obscureText: passwordVisible,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/candado.png'),
                 suffixIcon: IconButton(
                   icon: Icon(passwordVisible
@@ -139,8 +138,8 @@ class _RegistrarPageState extends State<RegistrarPage> {
                 ),
                 hintText: 'Contraseña',
                 labelText: 'Contraseña',
-                labelStyle: TextStyle(color: Colors.black),
-                focusedBorder: OutlineInputBorder(
+                labelStyle: const TextStyle(color: Colors.black),
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
                 ),
               ),
@@ -162,12 +161,12 @@ class _RegistrarPageState extends State<RegistrarPage> {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/candado.png'),
                 hintText: 'Email',
                 labelText: 'Email',
-                labelStyle: TextStyle(color: Colors.black),
-                focusedBorder: OutlineInputBorder(
+                labelStyle: const TextStyle(color: Colors.black),
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
                 ),
               ),
@@ -210,7 +209,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
 
                 // Realizar la solicitud POST a la API
                 var response = await http.post(uri, headers: {'Content-Type': 'application/json'});
-debugPrint("HOLAAA:" +uri.toString());
+debugPrint("HOLAAA:$uri");
                 // Verificar el código de estado de la respuesta
                 if (response.statusCode == 200) {
                   // Analizar la respuesta JSON
@@ -229,15 +228,15 @@ debugPrint("HOLAAA:" +uri.toString());
               child: Row(
                 children: [
 
-                  SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
-                  Text(
+                  const SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
+                  const Text(
                     'Registrarse',
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 15.0),
+                  const SizedBox(width: 15.0),
                   Image.asset("assets/Iconos/ingresar.png",),
                 ],
               ),

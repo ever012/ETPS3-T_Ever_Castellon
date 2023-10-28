@@ -11,11 +11,8 @@ import 'package:repuestos_de_carros_auto_parts/nueva_sucursal_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
 import 'package:repuestos_de_carros_auto_parts/nuevo_producto_page.dart';
 import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
-import 'package:repuestos_de_carros_auto_parts/nuevos_roles_page.dart';
 import 'package:repuestos_de_carros_auto_parts/registrar_usuario_page.dart';
 import 'package:repuestos_de_carros_auto_parts/sucursales_page.dart';
-import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
-import 'package:repuestos_de_carros_auto_parts/usuarios_page.dart';
 import 'info_producto_page.dart';
 
 
@@ -49,11 +46,9 @@ class MyApp extends StatelessWidget {
         '/productos_x_id_page': (context) => const ProductosXID(), //sucursal especifica
         '/nuevo_producto_page': (context) => const NuevoProductoPage(), //quitar al terminar
         '/nueva_sucursal_page': (context) => const NuevaSucursalPage(), //quitar al terminar
-        '/roles_page': (context) => const RolesPage(), //quitar al terminar
-        '/usuarios_page': (context) => const UsuariosPage(),
-        '/info_page': (context) => InfoProductosPage(productoId: '123'), //necesita argumentos
-        '/nueva_ubicacion_page': (context) => UbicacionesPage(),
-        '/nueva_categoria_page': (context) => const RegistrarPage(),
+        '/info_page': (context) => const InfoProductosPage(productoId: '123'), //necesita argumentos
+        '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
+        '/nueva_categoria_page': (context) => const CategoriasPage(),
         '/map_ubicaciones_page': (context) => const MapUbicaciones(),
       },
 
@@ -65,7 +60,7 @@ class MyApp extends StatelessWidget {
 
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key});
+  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -102,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 foregroundColor: Colors.white,
                 backgroundColor: const Color.fromARGB(255, 238, 238, 238),
                 title: const Text(""),
-                actions: [],
+                actions: const [],
                 flexibleSpace: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(0.0),
@@ -142,13 +137,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(34)),
+                                borderRadius: const BorderRadius.all(Radius.circular(34)),
                                 boxShadow: [ // Agrega una sombra en la parte inferior
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 1,
                                     blurRadius: 2, //para neblina en los bordes
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                   ),
                                 ],
                               ),
@@ -164,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Container(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text("SUCURSALES"),
+                            child: const Text("SUCURSALES"),
                           )
                         ],
                       ),
@@ -179,13 +174,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(34)),
+                                borderRadius: const BorderRadius.all(Radius.circular(34)),
                                 boxShadow: [ // Agrega una sombra en la parte inferior
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 1,
                                     blurRadius: 2, //para neblina en los bordes
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                   ),
                                 ],
                               ),
@@ -200,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Container(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text("UBICACIONES"),
+                            child: const Text("UBICACIONES"),
                           )
                         ],
                       ),
@@ -216,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Las variables de SharedPreferences NO existen, carga este otro código
       return SafeArea(
           child: Scaffold(
-            appBar: AppBarPersonalizada(),
+            appBar: const AppBarPersonalizada(),
             drawer: const MenuLateral(),
             body:  Center(
               child: Row(
@@ -232,13 +227,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(34)),
+                            borderRadius: const BorderRadius.all(Radius.circular(34)),
                             boxShadow: [ // Agrega una sombra en la parte inferior
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 1,
                                 blurRadius: 2, //para neblina en los bordes
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
@@ -254,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Container(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text("SUCURSALES"),
+                        child: const Text("SUCURSALES"),
                       )
                     ],
                   ),
@@ -269,13 +264,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(34)),
+                            borderRadius: const BorderRadius.all(Radius.circular(34)),
                             boxShadow: [ // Agrega una sombra en la parte inferior
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 1,
                                 blurRadius: 2, //para neblina en los bordes
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
@@ -290,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Container(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text("UBICACIONES"),
+                        child: const Text("UBICACIONES"),
                       )
                     ],
                   ),
@@ -330,7 +325,7 @@ Widget getCardItem() {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -341,18 +336,18 @@ Widget getCardItem() {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  child: Icon(Icons.supervisor_account,
-                      size: 24, color: Colors.blueAccent),
                   padding: const EdgeInsets.all(12),
+                  child: const Icon(Icons.supervisor_account,
+                      size: 24, color: Colors.blueAccent),
                 ),
                 Container(
-                  child: Text(
+                  padding: const EdgeInsets.all(12),
+                  child: const Text(
                     "2100",
                     style: TextStyle(
                       color: Colors.blueAccent,
                     ),
                   ),
-                  padding: const EdgeInsets.all(12),
                 ),
               ],
             ),
@@ -362,8 +357,8 @@ Widget getCardItem() {
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(12),
                       bottomLeft: Radius.circular(12))),
-              child: Text("Student"),
               padding: const EdgeInsets.all(12),
+              child: const Text("Student"),
             )
           ],
         ),

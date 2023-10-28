@@ -1,6 +1,4 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -20,7 +18,7 @@ class _MapUbicacionesState extends State<MapUbicaciones> {
   @override
   void initState() {
     super.initState();
-    _markers = Set<Marker>();
+    _markers = <Marker>{};
     _fetchLocations();
   }
 
@@ -46,7 +44,7 @@ class _MapUbicacionesState extends State<MapUbicaciones> {
 
   Future<BitmapDescriptor> _createCustomMarker(BuildContext context) async {
     return await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(devicePixelRatio: 5),
+      const ImageConfiguration(devicePixelRatio: 5),
       "assets/Iconos/puntero-del-mapa.png",
     );
   }
@@ -55,10 +53,10 @@ class _MapUbicacionesState extends State<MapUbicaciones> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Google Maps'),
+        title: const Text('Google Maps'),
       ),
       body: GoogleMap(
-        initialCameraPosition: CameraPosition(target: LatLng(13.701503510208184, -89.2015454424298), zoom: 12.0),
+        initialCameraPosition: const CameraPosition(target: LatLng(13.701503510208184, -89.2015454424298), zoom: 12.0),
         markers: _markers,
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
-import 'package:repuestos_de_carros_auto_parts/main.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -54,11 +53,11 @@ class _LoginPageState extends State<LoginPage> {
             drawer: const MenuLateral(),
             body: CustomScrollView(
               slivers: <Widget>[
-                SliverAppBar(
+                const SliverAppBar(
                   title: Text(""),
                   floating: true,
                   expandedHeight: 210.0,
-                  backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+                  backgroundColor: Color.fromARGB(255, 238, 238, 238),
                   flexibleSpace: AppBarPersonalizada(),
                 ),
                 SliverToBoxAdapter(
@@ -67,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 15.0,),
-                        Text("Iniciar Sesión", style: TextStyle(fontSize: 32),),
+                        const Text("Iniciar Sesión", style: TextStyle(fontSize: 32),),
                         const SizedBox(height: 15.0,),
                         _userTextField(),
                         const SizedBox(height: 15.0,),
@@ -104,14 +103,14 @@ class _LoginPageState extends State<LoginPage> {
               controller: _emailController,
               keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/correo.png'),
                 hintText: 'Usuario',
                 labelText: 'Usuario',
-                labelStyle: TextStyle(color: Colors.black),
+                labelStyle: const TextStyle(color: Colors.black),
 
                 focusColor: Colors.teal,
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
 
                 ),
@@ -137,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
               keyboardType: TextInputType.text,
               obscureText: passwordVisible,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/candado.png'),
                 suffixIcon: IconButton(
                   icon: Icon(passwordVisible
@@ -153,8 +152,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 hintText: 'Contraseña',
                 labelText: 'Contraseña',
-                labelStyle: TextStyle(color: Colors.black),
-                focusedBorder: OutlineInputBorder(
+                labelStyle: const TextStyle(color: Colors.black),
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
                 ),
               ),
@@ -247,6 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                   // Guardar el token y el usuario en SharedPreferences
                   await _prefs.setString('token', jsonResponse['token']);
                   await _prefs.setString('usuario', jsonResponse['usuario']);
+                  await _prefs.setString('email', jsonResponse['email']);
 
                   _showNotification('Inicio de sesión exitoso');
 
@@ -267,15 +267,15 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   children: [
 
-                    SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
-                    Text(
+                    const SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
+                    const Text(
                       'Iniciar',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 1.0),
+                    const SizedBox(width: 1.0),
                     Image.asset("assets/Iconos/ingresar.png",),
                   ],
                 ),
