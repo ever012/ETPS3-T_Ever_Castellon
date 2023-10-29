@@ -234,8 +234,8 @@ class CardProducto extends StatelessWidget {
             children: <Widget>[
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(1, 1, 5, 0),
-                title: Text(nombre),
-                subtitle: Text(descripcion),
+                title: Text(nombre, style: const TextStyle(fontSize: 15.0)),
+                subtitle: Text(descripcion.length >= 50 ? "${descripcion.substring(0, 50)}..." : descripcion),
                 leading: SizedBox(
                   width: 80,
                   child: imageWidget,
@@ -246,7 +246,7 @@ class CardProducto extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text('\$$precio', style: const TextStyle(fontSize: 24.0)),
+                    Text('\$$precio', style: const TextStyle(fontSize: 20.0)),
                   ],
                 ),
               )

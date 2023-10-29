@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'api_config.dart';
+import 'info_producto_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,6 +66,7 @@ class _ProductosPageState extends State<ProductosPage> {
 
       for (var producto in data) {
         productos.add({
+          'id_producto': producto['id_producto'],
           'nombre': producto['nombre'],
           'descripcion': producto['descripcion'],
           'precio': producto['precio'].toString(),
@@ -155,6 +157,7 @@ class _ProductosPageState extends State<ProductosPage> {
                             (producto) => CardProducto(
                           imagen: producto['imagen'] ?? 'https://i.ibb.co/bPcw0ZQ/tienda-1.png',
                           nombre: producto['nombre'],
+                          id_producto: producto['id_producto'].toString(),
                           descripcion: producto['descripcion'],
                           precio: producto['precio'],
                         ),
@@ -177,8 +180,9 @@ class CardProducto extends StatelessWidget {
   final String nombre;
   final String descripcion;
   final String precio;
+  final String id_producto;
 
-  const CardProducto({Key? key, required this.imagen, required this.nombre, required this.descripcion, required this.precio}) : super(key: key);
+  const CardProducto({Key? key, required this.imagen, required this.id_producto,required this.nombre, required this.descripcion, required this.precio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +199,7 @@ class CardProducto extends StatelessWidget {
       }
     } else {
       // Si no hay imagen, muestra una imagen predeterminada
-      imageWidget = Image.asset('assets/imagenes/logoautoparts.png', width: 80, height: 80, fit: BoxFit.cover);
+      imageWidget = Image.asset('assets/imagenes/tienda_1.png', width: 80, height: 80, fit: BoxFit.cover);
     }
 
     return Card(
@@ -210,7 +214,12 @@ class CardProducto extends StatelessWidget {
       child: InkWell(
         splashColor: const Color.fromARGB(255, 71, 73, 73),
         onTap: () {
-          Navigator.pushNamed(context, "/info_page", arguments: {'nombre': nombre, 'precio': precio});
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InfoProductosPage(productoId: id_producto), // Establece el valor del productoId aquí
+            ),
+          );
         },
         child: SizedBox(
           width: 340,
@@ -219,7 +228,7 @@ class CardProducto extends StatelessWidget {
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(1, 1, 5, 0),
                 title: Text(nombre),
-                subtitle: Text(descripcion),
+                subtitle: Text(descripcion.length >= 50 ? "${descripcion.substring(0, 50)}..." : descripcion),
                 leading: SizedBox(
                   width: 80,
                   child: imageWidget,

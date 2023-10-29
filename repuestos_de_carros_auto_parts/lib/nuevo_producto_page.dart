@@ -100,15 +100,15 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
                   children: [
                     (imagePath == null)? Container() : Image.file(File(imagePath!), width: 100,),
                     ElevatedButton(
-                      child: Text("SELECCIONAR IMAGEN"),
+                      child: const Text("SELECCIONAR IMAGEN"),
                         onPressed: () async {
                           final ImagePicker picker = ImagePicker();
                           XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
                           if (pickedFile != null) {
                             setState(() {
-                              imagePath = pickedFile.path; //aqui es donde da el error en todo este ElevatedButton
+                              imagePath = pickedFile.path;
                             });
-                            List<int> bytes = await File(imagePath!).readAsBytesSync();
+                            List<int> bytes = File(imagePath!).readAsBytesSync();
                             _imagen64 = base64.encode(bytes);
                           } else {
                             // El usuario canceló la selección de la imagen.
@@ -361,8 +361,8 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             String precio = _precioController.text;
             String sucursal = sucursalDropdownValue;
             String categoria = categoriaDropdownValue;
-            debugPrint("SUCURSAL:"+sucursal);
-debugPrint("IMAGEEEN:" + _imagen64!);
+            debugPrint("SUCURSAL:$sucursal");
+debugPrint("IMAGEEEN:${_imagen64!}");
             // Crea un objeto de tipo MultipartRequest
             var request = http.MultipartRequest(
               'POST',
@@ -565,7 +565,7 @@ class _DropdownMenuCategoriaState extends State<DropdownMenuCategoria> {
 class ImagePickerWidget extends StatefulWidget {
   final Function(String)? onImageSelected;
 
-  ImagePickerWidget({required this.onImageSelected});
+  const ImagePickerWidget({super.key, required this.onImageSelected});
 
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
