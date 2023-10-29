@@ -25,8 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     passwordVisible = true;
-    _emailController = TextEditingController(text: "ever");
-    _passwordController = TextEditingController(text: "123456789");
+    _emailController = TextEditingController(text: "");
+    _passwordController = TextEditingController(text: "");
     SharedPreferences.getInstance().then((prefs) {
       _prefs = prefs;
     });
