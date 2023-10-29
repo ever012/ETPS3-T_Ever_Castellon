@@ -370,7 +370,7 @@ debugPrint("ubicacion:$jsonData");
 
             // Crea un mapa con los datos que quieres enviar al servidor
             Map<String, dynamic> data = {
-              "cod_ubicacion": codigo,
+              "cod_sucursal": codigo,
               "nombre": nombre,
               "id_ubicacion": ubicacion,
               "ubicacion": {}
@@ -395,10 +395,10 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Sucursal agregada con éxito.");
+              _showNotification("Sucursal modificada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al agregar la Sucursal Código de estado: ${response
+              _showNotification("Error al modificar la Sucursal Código de estado: ${response
                   .statusCode}");
             }
           },

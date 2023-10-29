@@ -346,10 +346,10 @@ Widget _botonModificar() {
           // Verifica el estado de la respuesta
           if (response.statusCode == 200) {
             // Si la solicitud fue exitosa, imprime la respuesta del servidor
-            _showNotification("Ubicación agregada con éxito");
+            _showNotification("Ubicación modificada con éxito");
           } else {
             // Si la solicitud falla, imprime el código de estado
-            _showNotification("Error al agregar la ubicación. Código de estado: ${response
+            _showNotification("Error al modificar la ubicación. Código de estado: ${response
                 .statusCode}");
           }
         },
