@@ -391,10 +391,10 @@ debugPrint("IMAGEEEN:${_imagen64!}");
               // Verifica el estado de la respuesta
               if (response.statusCode == 200) {
                 // Si la solicitud fue exitosa, imprime la respuesta del servidor
-                _showNotification("Producto agregada con éxito: $responseString");
+                _showNotification("Producto agregada con éxito.");
               } else {
                 // Si la solicitud falla, imprime el código de estado
-                _showNotification("Error al agregar la Producto. Código de estado: ${response.statusCode}");
+                _showNotification("Error al agregar la Producto Código de estado: ${response.statusCode}");
               }
             } catch (error) {
               // Maneja cualquier error que ocurra durante la solicitud
@@ -435,10 +435,10 @@ debugPrint("IMAGEEEN:${_imagen64!}");
             );
 
             if (response.statusCode == 200) {
-              _showNotification("Ubicación eliminada con éxito: ${response.body}");
+              _showNotification("Producto eliminada con éxito.");
             } else {
 
-              _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
+              _showNotification("Error al eliminar la Producto Código de estado: ${response.statusCode}");
             }
           },
           child: Container(

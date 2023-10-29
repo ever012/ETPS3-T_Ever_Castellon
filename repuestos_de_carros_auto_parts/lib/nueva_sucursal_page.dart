@@ -287,10 +287,10 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Ubicación agregada con éxito: ${response.body}");
+              _showNotification("Sucursal agregada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al agregar la ubicación. Código de estado: ${response.statusCode}");
+              _showNotification("Error al agregar la Sucursal Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
@@ -333,10 +333,10 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Ubicación eliminada con éxito: ${response.body}");
+              _showNotification("Sucursal eliminada con éxito");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
+              _showNotification("Error al eliminar la Sucursal Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
@@ -366,13 +366,14 @@ debugPrint("ubicacion:$jsonData");
             String id = _idController.text;
             String codigo = _codigoController.text;
             String nombre = _nombreController.text;
-            String Idubicacion = ubicacionDropdownValue;
+            String ubicacion = ubicacionDropdownValue;
 
             // Crea un mapa con los datos que quieres enviar al servidor
             Map<String, dynamic> data = {
               "cod_ubicacion": codigo,
               "nombre": nombre,
-              "id": Idubicacion,
+              "id_ubicacion": ubicacion,
+              "ubicacion": {}
             };
 
             // Convierte el mapa a un JSON
@@ -394,10 +395,10 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Ubicación agregada con éxito: ${response.body}");
+              _showNotification("Sucursal agregada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al agregar la ubicación. Código de estado: ${response
+              _showNotification("Error al agregar la Sucursal Código de estado: ${response
                   .statusCode}");
             }
           },
@@ -457,12 +458,18 @@ class _DropdownMenuUbicacionesState extends State<DropdownMenuUbicaciones> {
         });
         widget.onSelected(value);
       },
-      items: widget.ubicaciones.map((Ubicacion ubicacion) {
-        return DropdownMenuItem<int>(
-          value: ubicacion.idUbicacion,
-          child: Text(ubicacion.nombre),
-        );
-      }).toList(),
+      items: [
+        DropdownMenuItem<int>(
+          value: null, // Indicador visual sin valor real asociado
+          child: Text('Seleccione una ubicación'),
+        ),
+        ...widget.ubicaciones.map((Ubicacion ubicacion) {
+          return DropdownMenuItem<int>(
+            value: ubicacion.idUbicacion,
+            child: Text(ubicacion.nombre),
+          );
+        }).toList(),
+      ],
     );
   }
 }

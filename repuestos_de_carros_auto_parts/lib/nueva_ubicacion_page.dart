@@ -321,7 +321,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Ubicación agregada con éxito: ${response.body}");
+              _showNotification("Ubicación agregada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
               _showNotification("Error al agregar la ubicación. Código de estado: ${response
@@ -368,7 +368,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Ubicación eliminada con éxito: ${response.body}");
+              _showNotification("Ubicación eliminada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
               _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
@@ -431,7 +431,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Ubicación modificada con éxito: ${response.body}");
+              _showNotification("Ubicación modificada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
               _showNotification("Error al modificar la ubicación. Código de estado: ${response
