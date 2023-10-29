@@ -12,6 +12,21 @@ void main() {
   runApp(const MyApp());
 }
 
+//archivo aparte
+class Ubicacion {
+  final int idUbicacion;
+  final String nombre;
+
+  Ubicacion({required this.idUbicacion, required this.nombre});
+
+  factory Ubicacion.fromJson(Map<String, dynamic> json) {
+    return Ubicacion(
+      idUbicacion: json['id_ubicacion'],
+      nombre: json['nombre'],
+    );
+  }
+}//
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -46,6 +61,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _codigoController = TextEditingController();
   final TextEditingController _nombreController = TextEditingController();
+  List<Ubicacion> ubicaciones = [];
   String ubicacionDropdownValue = 'Seleccione Ubicación';
   String? nombreUsuario;
   String? tokenCompartido;
@@ -62,8 +78,22 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
   void initState() {
     super.initState();
     _loadSharedPreferences();
+    _fetchUbicaciones();
   }
 
+  Future<void> _fetchUbicaciones() async {
+    final response =
+    await http.get(Uri.parse('${ApiConfig.apiUrl}api/ubicacion/listaUbicacion'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        ubicaciones = data.map((item) => Ubicacion.fromJson(item)).toList();
+      });
+    } else {
+      throw Exception('Failed to load ubicaciones');
+    }
+  }
 
   Future<void> _loadSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -97,9 +127,10 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
                 _nombreTextField(),
                 const SizedBox(height: 15.0,),
                 DropdownMenuUbicaciones(
-                  onSelected: (String? value) {
+                  ubicaciones: ubicaciones, // Lista de ubicaciones obtenidas de la API
+                  onSelected: (int? value) {
                     setState(() {
-                      ubicacionDropdownValue = value ?? 'Seleccione Ubicación';
+                      ubicacionDropdownValue = value?.toString() ?? 'Seleccione Ubicación';
                     });
                   },
                 ),
@@ -231,14 +262,15 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
 
             // Crea un mapa con los datos que quieres enviar al servidor
             Map<String, dynamic> data = {
-              "cod_ubicacion": codigo,
+              "cod_sucursal": codigo,
               "nombre": nombre,
-              "ubicacion": ubicacion,
+              "id_ubicacion": ubicacion,
+              "ubicacion": {}
             };
 
             // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
-debugPrint("ubicacion:$ubicacion");
+debugPrint("ubicacion:$jsonData");
             // URL del endpoint de la API donde deseas enviar los datos
             String apiUrl = "${ApiConfig.apiUrl}api/sucursal/crearSucursal";
 
@@ -397,38 +429,43 @@ debugPrint("ubicacion:$ubicacion");
 
 
 
-const List<String> list = <String>['Seleccione Ubicación','One', 'Two', 'Three', 'Four'];
+//const List<String> list = <String>['Seleccione Ubicación','One', 'Two', 'Three', 'Four'];
 class DropdownMenuUbicaciones extends StatefulWidget {
-  final ValueChanged<String?> onSelected;
+  final List<Ubicacion> ubicaciones;
+  final ValueChanged<int?> onSelected;
 
-  const DropdownMenuUbicaciones({required this.onSelected, Key? key}) : super(key: key);
+  const DropdownMenuUbicaciones({
+    required this.ubicaciones,
+    required this.onSelected,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DropdownMenuUbicaciones> createState() => _DropdownMenuUbicacionesState();
 }
 
 class _DropdownMenuUbicacionesState extends State<DropdownMenuUbicaciones> {
-  String dropdownValue = list.first;
+  int? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu<String>(
-      initialSelection: dropdownValue,
-      onSelected: (String? value) {
+    return DropdownButtonFormField<int>(
+      value: dropdownValue,
+      onChanged: (int? value) {
         setState(() {
-          dropdownValue = value!;
-          widget.onSelected(value); // Llama a la función proporcionada por el padre
+          dropdownValue = value;
         });
+        widget.onSelected(value);
       },
-      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
+      items: widget.ubicaciones.map((Ubicacion ubicacion) {
+        return DropdownMenuItem<int>(
+          value: ubicacion.idUbicacion,
+          child: Text(ubicacion.nombre),
+        );
       }).toList(),
-      width: 350,
     );
   }
 }
-
-
 
 
 
