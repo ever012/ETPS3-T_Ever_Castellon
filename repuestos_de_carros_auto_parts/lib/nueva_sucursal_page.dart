@@ -459,7 +459,7 @@ class _DropdownMenuUbicacionesState extends State<DropdownMenuUbicaciones> {
         widget.onSelected(value);
       },
       items: [
-        DropdownMenuItem<int>(
+        const DropdownMenuItem<int>(
           value: null, // Indicador visual sin valor real asociado
           child: Text('Seleccione una ubicación'),
         ),

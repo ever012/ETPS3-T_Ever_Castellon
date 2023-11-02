@@ -98,23 +98,24 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    (imagePath == null)? Container() : Image.file(File(imagePath!), width: 100,),
+                    (imagePath == null) ? Container() : Image.file(File(imagePath!), width: 200,),
                     ElevatedButton(
                       child: const Text("SELECCIONAR IMAGEN"),
-                        onPressed: () async {
-                          final ImagePicker picker = ImagePicker();
-                          XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-                          if (pickedFile != null) {
-                            setState(() {
-                              imagePath = pickedFile.path;
-                            });
-                            List<int> bytes = File(imagePath!).readAsBytesSync();
-                            _imagen64 = base64.encode(bytes);
-                          } else {
-                            // El usuario canceló la selección de la imagen.
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+                        if (pickedFile != null) {
+                          setState(() {
+                            imagePath = pickedFile.path;
+                          });
 
-                          }
+
+                          List<int> bytes = await File(imagePath!).readAsBytes();
+                          _imagen64 = base64Encode(bytes);
+                        } else {
+                          // El usuario canceló la selección de la imagen.
                         }
+                      },
                     ),
                     _idTextField(),
                     const SizedBox(height: 15.0,),

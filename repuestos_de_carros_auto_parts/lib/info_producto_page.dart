@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:repuestos_de_carros_auto_parts/map_ubicacion_especifica.dart';
 import 'dart:convert';
 
-import 'api_config.dart'; // Necesario para decodificar el JSON
+import 'api_config.dart';
+
 
 
 void main() {
@@ -49,7 +51,7 @@ class InfoProductosPage extends StatefulWidget {
 class _InfoProductosPageState extends State<InfoProductosPage> {
   Future<Map<String, dynamic>> _fetchProducto() async {
     final response = await http.get(
-        Uri.parse('${ApiConfig.apiUrl}api/producto/productoId?id=${widget.productoId}'));
+        Uri.parse('${ApiConfig.apiUrl}api/producto/descripcionProductoId?id=${widget.productoId}'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -193,7 +195,16 @@ class _InfoProductosPageState extends State<InfoProductosPage> {
                         style: const TextStyle(fontSize: 15, color: Color(0xff95A4BB)),
                       ),
                     ),
-
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => MapUbicaciones(id: producto['sucursal']["ubicacion"]["id_ubicacion"].toString(),latitud: producto['sucursal']["ubicacion"]["latitud"],longitud: producto['sucursal']["ubicacion"]["longitud"],nombre: producto['sucursal']["ubicacion"]["nombre"],), // Establece el valor del productoId aquí
+                        ),);
+                      },
+                      child: const Text("¿DÓNDE PUEDO ENCONTRARLO EN EL MAPA?"),
+                    ),
 
                   ],
                 ),
@@ -204,6 +215,8 @@ class _InfoProductosPageState extends State<InfoProductosPage> {
       ),
     );
   }
-}
 
+
+
+}
 

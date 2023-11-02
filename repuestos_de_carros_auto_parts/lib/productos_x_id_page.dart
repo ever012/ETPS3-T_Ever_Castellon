@@ -63,6 +63,7 @@ Future<void> obtenerSucursal() async {
   }
 }
 
+
   Future<List<Map<String, dynamic>>> _fetchProductos() async {
     final response = await http.get(Uri.parse('${ApiConfig.apiUrl}api/producto/listaProductoSucursal?id=$sucursal'));
 
