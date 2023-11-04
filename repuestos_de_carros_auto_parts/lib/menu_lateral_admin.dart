@@ -32,7 +32,7 @@ class _MenuLateralAdminState extends State<MenuLateralAdmin> {
         child: ListView(
           children: <Widget>[
             Container(
-              height: 200, // Ajusta la altura de la imagen como desees
+              height: 200, // Ajusta la altura de la imagen
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/imagenes/logoautoparts.png'),
@@ -82,7 +82,7 @@ class _MenuLateralAdminState extends State<MenuLateralAdmin> {
               leading: const Icon(Icons.production_quantity_limits_outlined, color: Colors.black),
               title: const Text("PRODUCTOS"),
               onTap: (){
-                Navigator.pushNamed(context, '/nuevo_producto_page'); //cambia a este productos_page
+                Navigator.pushNamed(context, '/nuevo_producto_page');
               },
             ),
             ListTile(

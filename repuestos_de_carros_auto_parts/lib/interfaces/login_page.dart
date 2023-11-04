@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _emailController,
-              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/correo.png'),
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 focusColor: Colors.teal,
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
 
                 ),
               ),
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Contraseña',
                 labelStyle: const TextStyle(color: Colors.black),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
                 ),
               ),
               onChanged: (value) {},
@@ -238,9 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                     body: json.encode(body),
                     headers: {'Content-Type': 'application/json'});
 
-                // Verificar el código de estado de la respuesta
                 if (response.statusCode == 200) {
-                  // Analizar la respuesta JSON
                   var jsonResponse = json.decode(response.body);
 
                   // Guardar el token y el usuario en SharedPreferences
@@ -267,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   children: [
 
-                    const SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
+                    const SizedBox(width: 10.0),
                     const Text(
                       'Iniciar',
                       style: TextStyle(

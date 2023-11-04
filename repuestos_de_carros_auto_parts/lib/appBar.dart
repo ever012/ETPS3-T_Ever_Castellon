@@ -18,7 +18,6 @@ class AppBarPersonalizada extends StatelessWidget implements PreferredSizeWidget
           IconButton(
             icon: const Icon(Icons.person, size: 40.0,),
             onPressed: () {
-              // Aquí agregar la funcionalidad del botón de usuario
               Navigator.pushNamed(context, '/login_page');
             },
           ),

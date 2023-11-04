@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (nombre != null && nombre!.isNotEmpty) {
-      // Las variables de SharedPreferences existen, carga este código
+      // si Las variables de SharedPreferences existen, carga este código
       return SafeArea(
           child: Scaffold(
             appBar:PreferredSize(

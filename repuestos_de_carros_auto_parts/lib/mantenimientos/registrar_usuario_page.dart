@@ -91,7 +91,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _userController,
-              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 prefixIcon: Image.asset('assets/Iconos/correo.png'),
@@ -101,7 +101,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
 
                 focusColor: Colors.teal,
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
 
                 ),
               ),
@@ -140,7 +140,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
                 labelText: 'Contraseña',
                 labelStyle: const TextStyle(color: Colors.black),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
                 ),
               ),
               onChanged: (value) {},
@@ -167,7 +167,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
                 labelText: 'Email',
                 labelStyle: const TextStyle(color: Colors.black),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
                 ),
               ),
               onChanged: (value) {},
@@ -199,23 +199,20 @@ class _RegistrarPageState extends State<RegistrarPage> {
               if (_emailController.text == "" || _passwordController.text == "") {
                 _showNotification('Ingrese correo y/o contraseña');
               } else {
-                // Obtener el usuario y la contraseña del controlador de texto
                 String usuario = _userController.text;
                 String password = _passwordController.text;
                 String email = _emailController.text;
 
-                // Construir el URI de la solicitud POST con los parámetros
+                // Construir el URI
                 var uri = Uri.parse('${ApiConfig.apiUrl}api/login/registroUsuario?usuario=$usuario&password=$password&email=$email');
 
-                // Realizar la solicitud POST a la API
+                // solicitud POST a la API
                 var response = await http.post(uri, headers: {'Content-Type': 'application/json'});
-debugPrint("HOLAAA:$uri");
-                // Verificar el código de estado de la respuesta
+
                 if (response.statusCode == 200) {
-                  // Analizar la respuesta JSON
                   var jsonResponse = response.body;
                   _showNotification('USUARIO CREADO CORRECTAMENTE');
-                  // Navegar a la página principal con los datos del usuario
+
                   Navigator.pushNamed(context, '/login_page');
                 } else {
                   _showNotification('Credenciales incorrectas');
@@ -228,7 +225,7 @@ debugPrint("HOLAAA:$uri");
               child: Row(
                 children: [
 
-                  const SizedBox(width: 10.0), // Agregamos un espacio entre el icono y el texto
+                  const SizedBox(width: 10.0), // espacio entre el icono y el texto
                   const Text(
                     'Registrarse',
                     style: TextStyle(

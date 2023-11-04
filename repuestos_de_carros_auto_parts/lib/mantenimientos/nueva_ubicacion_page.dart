@@ -125,7 +125,6 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             child: TextField(
               controller: _idController,
               keyboardType: TextInputType.number,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -137,7 +136,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(
-                      color: Colors.black), // Cambio de color a negro
+                      color: Colors.black),
 
                 ),
               ),
@@ -158,7 +157,6 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             child: TextField(
               controller: _codigoController,
               keyboardType: TextInputType.number,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -170,7 +168,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(
-                      color: Colors.black), // Cambio de color a negro
+                      color: Colors.black),
 
                 ),
               ),
@@ -191,7 +189,6 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             child: TextField(
               controller: _nombreController,
               keyboardType: TextInputType.text,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -203,7 +200,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(
-                      color: Colors.black), // Cambio de color a negro
+                      color: Colors.black),
 
                 ),
               ),
@@ -223,7 +220,6 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             child: TextField(
               controller: _coordenadasLongitudController,
               keyboardType: TextInputType.text,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -235,7 +231,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(
-                      color: Colors.black), // Cambio de color a negro
+                      color: Colors.black),
 
                 ),
               ),
@@ -259,7 +255,6 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             child: TextField(
               controller: _coordenadasLatitudController,
               keyboardType: TextInputType.text,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -271,7 +266,7 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(
-                      color: Colors.black), // Cambio de color a negro
+                      color: Colors.black),
 
                 ),
               ),
@@ -288,13 +283,12 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return GestureDetector(
           onTap: () async {
-            // Obtén los valores de los controladores de texto
             String codigo = _codigoController.text;
             String nombre = _nombreController.text;
             String longitud = _coordenadasLongitudController.text;
             String latitud = _coordenadasLatitudController.text;
 
-            // Crea un mapa con los datos que quieres enviar al servidor
+            // Crea un mapa con los datos a enviar al servidor
             Map<String, dynamic> data = {
               "cod_ubicacion": codigo,
               "nombre": nombre,
@@ -305,10 +299,10 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
 
-            // URL del endpoint de la API donde deseas enviar los datos
+            // URL del endpoint
             String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/crearUbicacion";
 
-            // Realiza la solicitud HTTP POST con el encabezado de autorización
+            //encabezado de autorización
             var response = await http.post(
               Uri.parse(apiUrl),
               headers: {
@@ -318,21 +312,20 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
               body: jsonData,
             );
 
-            // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
-              // Si la solicitud fue exitosa, imprime la respuesta del servidor
+              // Si la solicitud fue exitosa
               _showNotification("Ubicación agregada con éxito.");
             } else {
-              // Si la solicitud falla, imprime el código de estado
+              // Si la solicitud falla
               _showNotification("Error al agregar la ubicación. Código de estado: ${response
                   .statusCode}");
             }
           },
           child: Container(
-            width: 80.0, // Ajusta el ancho según tus necesidades
-            height: 80.0, // Ajusta el alto según tus necesidades
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xff229743), // Cambia el color de fondo a verde
+              color: const Color(0xff229743),
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -351,13 +344,10 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return GestureDetector(
           onTap: () async {
-            // Obtén el ID del controlador
             String id = _idController.text;
 
-            // URL del endpoint de la API donde deseas enviar la solicitud DELETE
             String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/eliminarUbicacion?id=$id";
-            debugPrint("IDDDDDD:$apiUrl");
-            // Realiza la solicitud HTTP DELETE con el encabezado de autorización
+
             var response = await http.delete(
               Uri.parse(apiUrl),
               headers: {
@@ -365,20 +355,17 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
               },
             );
 
-            // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
-              // Si la solicitud fue exitosa, imprime la respuesta del servidor
               _showNotification("Ubicación eliminada con éxito.");
             } else {
-              // Si la solicitud falla, imprime el código de estado
               _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
-            width: 80.0, // Ajusta el ancho según tus necesidades
-            height: 80.0, // Ajusta el alto según tus necesidades
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xffF02121), // Cambia el color de fondo a verde
+              color: const Color(0xffF02121),
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -397,14 +384,13 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return GestureDetector(
           onTap: () async {
-            // Obtén los valores de los controladores de texto
             String id = _idController.text;
             String codigo = _codigoController.text;
             String nombre = _nombreController.text;
             String longitud = _coordenadasLongitudController.text;
             String latitud = _coordenadasLatitudController.text;
 
-            // Crea un mapa con los datos que quieres enviar al servidor
+            // Crea un mapa con los datos a enviar al servidor
             Map<String, dynamic> data = {
               "cod_ubicacion": codigo,
               "nombre": nombre,
@@ -415,10 +401,9 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
             // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
 
-            // URL del endpoint de la API donde deseas enviar los datos
             String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/actualizaUbicacion?id=$id";
 
-            // Realiza la solicitud HTTP POST con el encabezado de autorización
+            // encabezado de autorización
             var response = await http.put(
               Uri.parse(apiUrl),
               headers: {
@@ -428,21 +413,20 @@ class _UbicacionesPageState extends State<UbicacionesPage> {
               body: jsonData,
             );
 
-            // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
-              // Si la solicitud fue exitosa, imprime la respuesta del servidor
+              // Si la solicitud fue exitosa
               _showNotification("Ubicación modificada con éxito.");
             } else {
-              // Si la solicitud falla, imprime el código de estado
+              // Si la solicitud falla
               _showNotification("Error al modificar la ubicación. Código de estado: ${response
                   .statusCode}");
             }
           },
           child: Container(
-            width: 80.0, // Ajusta el ancho según tus necesidades
-            height: 80.0, // Ajusta el alto según tus necesidades
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xff290BE7), // Cambia el color de fondo a verde
+              color: const Color(0xff290BE7), // Cambia el color de fondo
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(

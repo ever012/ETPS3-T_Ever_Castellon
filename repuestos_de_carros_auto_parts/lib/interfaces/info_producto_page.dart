@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class InfoProductosPage extends StatefulWidget {
-  final String productoId; // Define el parámetro productoId
+  final String productoId;
 
-  const InfoProductosPage({super.key, required this.productoId}); // Constructor que acepta productoId
+  const InfoProductosPage({super.key, required this.productoId}); // Constructor que acepta argumento productoId
 
   @override
   _InfoProductosPageState createState() => _InfoProductosPageState();

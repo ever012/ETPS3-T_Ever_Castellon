@@ -99,7 +99,7 @@ Widget build(BuildContext context) {
                     _nombreTextField(),
                     const SizedBox(height: 20.0,),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta la alineación según tus necesidades
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _botonGuardar(),
                         _botonEliminar(),
@@ -124,7 +124,7 @@ Widget build(BuildContext context) {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _idController,
-              keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
@@ -134,7 +134,7 @@ Widget build(BuildContext context) {
                 focusColor: Colors.teal,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
 
                 ),
               ),
@@ -154,7 +154,7 @@ Widget _codigoTextField() {
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             controller: _codigoController,
-            keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),
@@ -164,7 +164,7 @@ Widget _codigoTextField() {
               focusColor: Colors.teal,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
-                borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                borderSide: BorderSide(color: Colors.black),
 
               ),
             ),
@@ -187,7 +187,7 @@ Widget _nombreTextField() {
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: TextField(
             controller: _nombreController,
-            keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+            keyboardType: TextInputType.text,
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
               //icon: Icon(Icons.numbers),
@@ -197,7 +197,7 @@ Widget _nombreTextField() {
               focusColor: Colors.teal,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
-                borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                borderSide: BorderSide(color: Colors.black),
 
               ),
             ),
@@ -216,12 +216,11 @@ Widget _botonGuardar() {
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return GestureDetector(
         onTap: () async {
-          // valores de los controladores de texto
           String codigo = _codigoController.text;
           String nombre = _nombreController.text;
 
 
-          Map<String, dynamic> data = { // datos que quieres enviar al servidor
+          Map<String, dynamic> data = { // datos a enviar al servidor
             "cod_categoria": codigo,
             "nombre": nombre,
           };
@@ -230,7 +229,7 @@ Widget _botonGuardar() {
           String jsonData = jsonEncode(data);// Convierte el mapa a un JSON
           String apiUrl = "${ApiConfig.apiUrl}api/categoria/crearCategoria";
 
-          // Realiza la solicitud HTTP POST con el encabezado de autorización
+          // encabezado de autorización
           var response = await http.post(
             Uri.parse(apiUrl),
             headers: {
@@ -240,20 +239,19 @@ Widget _botonGuardar() {
             body: jsonData,
           );
 
-          // Verifica el estado de la respuesta
           if (response.statusCode == 200) {
-            // Si la solicitud fue exitosa, imprime la respuesta del servidor
+            // Si la solicitud fue exitosa
             _showNotification("Categoria agregada con éxito");
           } else {
-            // Si la solicitud falla, imprime el código de estado
+            // Si la solicitud falla
             _showNotification("Error al agregar la Categoria. Código de estado: ${response.statusCode}");
           }
         },
         child: Container(
-          width: 80.0, // Ajusta el ancho según tus necesidades
-          height: 80.0, // Ajusta el alto según tus necesidades
+          width: 80.0,
+          height: 80.0,
           decoration: BoxDecoration(
-            color: const Color(0xff229743), // Cambia el color de fondo a verde
+            color: const Color(0xff229743),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
@@ -271,12 +269,11 @@ Widget _botonEliminar() {
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return GestureDetector(
         onTap: () async {
-          // ID del controlador
           String id = _idController.text;
 
           // solicitud DELETE
           String apiUrl = "${ApiConfig.apiUrl}api/categoria/eliminarCategoria?id=$id";
-          // Realiza la solicitud HTTP DELETE con el encabezado de autorización
+
           var response = await http.delete(
             Uri.parse(apiUrl),
             headers: {
@@ -284,20 +281,19 @@ Widget _botonEliminar() {
             },
           );
 
-          // Verifica el estado de la respuesta
           if (response.statusCode == 200) {
-            // Si la solicitud fue exitosa, imprime la respuesta del servidor
+            // Si la solicitud fue exitosa
             _showNotification("Ubicación eliminada con éxito.");
           } else {
-            // Si la solicitud falla, imprime el código de estado
+            // Si la solicitud falla
             _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
           }
         },
         child: Container(
-          width: 80.0, // Ajusta el ancho según tus necesidades
-          height: 80.0, // Ajusta el alto según tus necesidades
+          width: 80.0,
+          height: 80.0,
           decoration: BoxDecoration(
-            color: const Color(0xffF02121), // Cambia el color de fondo a verde
+            color: const Color(0xffF02121),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
@@ -316,24 +312,21 @@ Widget _botonModificar() {
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return GestureDetector(
         onTap: () async {
-          // Obtén los valores de los controladores de texto
           String id = _idController.text;
           String codigo = _codigoController.text;
           String nombre = _nombreController.text;
 
-          // Crea un mapa con los datos que quieres enviar al servidor
+          // Crea un mapa con los datos a enviar al servidor
           Map<String, dynamic> data = {
             "cod_categoria": codigo,
             "nombre": nombre,
           };
-
-          // Convierte el mapa a un JSON
           String jsonData = jsonEncode(data);
 
-          // URL del endpoint de la API donde deseas enviar los datos
+          // URL del endpoint
           String apiUrl = "${ApiConfig.apiUrl}api/categoria/actualizaCategoria?id=$id";
 
-          //  solicitud HTTP PUT con el encabezado de autorización
+          // encabezado de autorización
           var response = await http.put(
             Uri.parse(apiUrl),
             headers: {
@@ -343,21 +336,20 @@ Widget _botonModificar() {
             body: jsonData,
           );
 
-          // Verifica el estado de la respuesta
           if (response.statusCode == 200) {
-            // Si la solicitud fue exitosa, imprime la respuesta del servidor
+            // Si la solicitud fue exitosa
             _showNotification("Ubicación modificada con éxito");
           } else {
-            // Si la solicitud falla, imprime el código de estado
+            // Si la solicitud falla
             _showNotification("Error al modificar la ubicación. Código de estado: ${response
                 .statusCode}");
           }
         },
         child: Container(
-          width: 80.0, // Ajusta el ancho según tus necesidades
-          height: 80.0, // Ajusta el alto según tus necesidades
+          width: 80.0,
+          height: 80.0,
           decoration: BoxDecoration(
-            color: const Color(0xff290BE7), // Cambia el color de fondo a verde
+            color: const Color(0xff290BE7),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(

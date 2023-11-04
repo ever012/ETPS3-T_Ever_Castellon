@@ -137,7 +137,6 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
                 const SizedBox(height: 20.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // Ajusta la alineación según tus necesidades
                   children: [
                     _botonGuardar(),
                     _botonEliminar(),
@@ -163,7 +162,6 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
             child: TextField(
               controller: _idController,
               keyboardType: TextInputType.number,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -175,7 +173,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(
-                      color: Colors.black), // Cambio de color a negro
+                      color: Colors.black),
 
                 ),
               ),
@@ -195,7 +193,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _codigoController,
-              keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
@@ -205,7 +203,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
                 focusColor: Colors.teal,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
 
                 ),
               ),
@@ -224,7 +222,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _nombreController,
-              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
                 //icon: Icon(Icons.numbers),
@@ -234,7 +232,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
                 focusColor: Colors.teal,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(color: Colors.black),
 
                 ),
               ),
@@ -268,13 +266,12 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
               "ubicacion": {}
             };
 
-            // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
-debugPrint("ubicacion:$jsonData");
-            // URL del endpoint de la API donde deseas enviar los datos
+
+            // URL del endpoint
             String apiUrl = "${ApiConfig.apiUrl}api/sucursal/crearSucursal";
 
-            // Realiza la solicitud HTTP POST con el encabezado de autorización
+            // encabezado de autorización
             var response = await http.post(
               Uri.parse(apiUrl),
               headers: {
@@ -284,12 +281,11 @@ debugPrint("ubicacion:$jsonData");
               body: jsonData,
             );
 
-            // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
-              // Si la solicitud fue exitosa, imprime la respuesta del servidor
+              // Si la solicitud fue exitosa
               _showNotification("Sucursal agregada con éxito.");
             } else {
-              // Si la solicitud falla, imprime el código de estado
+              // Si la solicitud falla
               _showNotification("Error al agregar la Sucursal Código de estado: ${response.statusCode}");
             }
           },
@@ -297,7 +293,7 @@ debugPrint("ubicacion:$jsonData");
             width: 80.0,
             height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xff229743), // Cambia el color de fondo a verde
+              color: const Color(0xff229743),
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -316,13 +312,11 @@ debugPrint("ubicacion:$jsonData");
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return GestureDetector(
           onTap: () async {
-            // Obtén el ID del controlador
             String id = _idController.text;
 
-            // URL del endpoint de la API donde deseas enviar la solicitud DELETE
+            // URL del endpoint
             String apiUrl = "${ApiConfig.apiUrl}api/sucursal/eliminarSucursal?id=$id";
-            debugPrint("IDDDDDD:$apiUrl");
-            // Realiza la solicitud HTTP DELETE con el encabezado de autorización
+            // encabezado de autorización
             var response = await http.delete(
               Uri.parse(apiUrl),
               headers: {
@@ -330,20 +324,19 @@ debugPrint("ubicacion:$jsonData");
               },
             );
 
-            // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
-              // Si la solicitud fue exitosa, imprime la respuesta del servidor
+              // Si la solicitud fue exitosa
               _showNotification("Sucursal eliminada con éxito");
             } else {
-              // Si la solicitud falla, imprime el código de estado
+              // Si la solicitud falla
               _showNotification("Error al eliminar la Sucursal Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
-            width: 80.0, // Ajusta el ancho según tus necesidades
-            height: 80.0, // Ajusta el alto según tus necesidades
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xffF02121), // Cambia el color de fondo a verde
+              color: const Color(0xffF02121),
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -362,27 +355,24 @@ debugPrint("ubicacion:$jsonData");
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return GestureDetector(
           onTap: () async {
-            // Obtén los valores de los controladores de texto
             String id = _idController.text;
             String codigo = _codigoController.text;
             String nombre = _nombreController.text;
             String ubicacion = ubicacionDropdownValue;
 
-            // Crea un mapa con los datos que quieres enviar al servidor
+            // Crea un mapa con los datos a enviar al servidor
             Map<String, dynamic> data = {
               "cod_sucursal": codigo,
               "nombre": nombre,
               "id_ubicacion": ubicacion,
               "ubicacion": {}
             };
-
-            // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
 
-            // URL del endpoint de la API donde deseas enviar los datos
+            // URL del endpoint
             String apiUrl = "${ApiConfig.apiUrl}api/sucursal/actualizaSucursal?id=$id";
 
-            // Realiza la solicitud HTTP POST con el encabezado de autorización
+            //encabezado de autorización
             var response = await http.put(
               Uri.parse(apiUrl),
               headers: {
@@ -392,21 +382,20 @@ debugPrint("ubicacion:$jsonData");
               body: jsonData,
             );
 
-            // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
-              // Si la solicitud fue exitosa, imprime la respuesta del servidor
+              // Si la solicitud fue exitosa
               _showNotification("Sucursal modificada con éxito.");
             } else {
-              // Si la solicitud falla, imprime el código de estado
+              // Si la solicitud falla
               _showNotification("Error al modificar la Sucursal Código de estado: ${response
                   .statusCode}");
             }
           },
           child: Container(
-            width: 80.0, // Ajusta el ancho según tus necesidades
-            height: 80.0, // Ajusta el alto según tus necesidades
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xff290BE7), // Cambia el color de fondo a verde
+              color: const Color(0xff290BE7),
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(

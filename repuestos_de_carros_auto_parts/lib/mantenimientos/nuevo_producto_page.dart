@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,12 +53,12 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
   final TextEditingController _precioController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
   String? imagePath = "";
-  String? _imagen64 = "";
+  final String _imagen64 = "";
   String sucursalDropdownValue = 'Seleccione Sucursal';
   String categoriaDropdownValue = 'Seleccione categoria';
   String? nombreUsuario;
   String? tokenCompartido;
-
+  XFile? pickedFile;
 
 // Crear una notificación en la parte inferior de la app
   void _showNotification(String message) {
@@ -93,28 +92,22 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             appBar: AppBar(title: const Text("Producto",style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),),
               centerTitle: true, ),
             drawer: const MenuLateralAdmin(), //solo agregar esta linea para agregar el menu desplegable
-            body: SingleChildScrollView( //este metodo permite que el contenido sea desplazable si ocupa más espacio vertical del disponible.
+            body: SingleChildScrollView( //este metodo permite que el contenido sea scroll si ocupa más espacio vertical del disponible.
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    (imagePath == null) ? Container() : Image.file(File(imagePath!), width: 200,),
+                    (pickedFile == null)
+                        ? Container()
+                        : Image.file(File(pickedFile!.path), width: 200,), // Mostrar la imagen seleccionada
                     ElevatedButton(
                       child: const Text("SELECCIONAR IMAGEN"),
                       onPressed: () async {
                         final ImagePicker picker = ImagePicker();
-                        XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
-                        if (pickedFile != null) {
-                          setState(() {
-                            imagePath = pickedFile.path;
-                          });
-
-
-                          List<int> bytes = await File(imagePath!).readAsBytes();
-                          _imagen64 = base64Encode(bytes);
-                        } else {
-                          // El usuario canceló la selección de la imagen.
-                        }
+                        XFile? file = await picker.pickImage(source: ImageSource.gallery);
+                        setState(() {
+                          pickedFile = file; // Almacena la imagen seleccionada en la variable pickedFile
+                        });
                       },
                     ),
                     _idTextField(),
@@ -146,11 +139,10 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
                     ),
                     const SizedBox(height: 20.0,),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta la alineación según tus necesidades
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta la alineación de los botones
                       children: [
                         _botonGuardar(),
                         _botonEliminar(),
-                        _botonModificar(),
                       ],
                     ),
                     const SizedBox(height: 20.0,),
@@ -172,7 +164,6 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             child: TextField(
               controller: _idController,
               keyboardType: TextInputType.number,
-              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
@@ -203,7 +194,7 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _codigoController,
-              keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
@@ -233,7 +224,7 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _codigobarraController,
-              keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
@@ -262,7 +253,7 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _nombreController,
-              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
                 //icon: Icon(Icons.numbers),
@@ -322,7 +313,7 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _precioController,
-              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
@@ -354,7 +345,6 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return GestureDetector(
           onTap: () async {
-            // Obtén los valores de los controladores de texto
             String codigo = _codigoController.text;
             String codigoBarra = _codigobarraController.text;
             String nombre = _nombreController.text;
@@ -362,51 +352,48 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
             String precio = _precioController.text;
             String sucursal = sucursalDropdownValue;
             String categoria = categoriaDropdownValue;
-            debugPrint("SUCURSAL:$sucursal");
-debugPrint("IMAGEEEN:${_imagen64!}");
+
             // Crea un objeto de tipo MultipartRequest
             var request = http.MultipartRequest(
               'POST',
               Uri.parse("${ApiConfig.apiUrl}api/producto/crearProductoImage?cod_prod=$codigo&cod_barr=$codigoBarra&nom=$nombre&desc=$descripcion&prec=$precio&id_cat=$categoria&id_suc=$sucursal"),
             );
 
-            // Agrega el archivo a la solicitud con el nombre "file"
-            http.MultipartFile multipartFile = http.MultipartFile.fromString(
-              'file',
-              _imagen64!,
-              filename: 'file',
-            );
-            request.files.add(multipartFile);
+            // Verifica si se seleccionó una imagen
+            if (pickedFile != null) {
+              // Crea un MultipartFile desde el archivo seleccionado
+              http.MultipartFile imageFile = await http.MultipartFile.fromPath(
+                'file', // Nombre del campo en la solicitud
+                pickedFile!.path, // Ruta del archivo seleccionado
+              );
 
-            // Realiza la solicitud HTTP POST con el encabezado de autorización
+              // Agrega el archivo a la solicitud
+              request.files.add(imageFile);
+            }
             request.headers['Authorization'] = 'Bearer $tokenCompartido';
 
             try {
-              // Envia la solicitud y obtén la respuesta
               var response = await request.send();
 
-              // Lee la respuesta del servidor
               var responseData = await response.stream.toBytes();
               var responseString = String.fromCharCodes(responseData);
 
               // Verifica el estado de la respuesta
               if (response.statusCode == 200) {
-                // Si la solicitud fue exitosa, imprime la respuesta del servidor
                 _showNotification("Producto agregada con éxito.");
               } else {
                 // Si la solicitud falla, imprime el código de estado
                 _showNotification("Error al agregar la Producto Código de estado: ${response.statusCode}");
               }
             } catch (error) {
-              // Maneja cualquier error que ocurra durante la solicitud
               _showNotification("Error al enviar la solicitud: $error");
             }
           },
           child: Container(
-            width: 80.0, // Ajusta el ancho según tus necesidades
-            height: 80.0, // Ajusta el alto según tus necesidades
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
-              color: const Color(0xff229743), // Cambia el color de fondo a verde
+              color: const Color(0xff229743), // color de fondo verde
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
@@ -436,10 +423,10 @@ debugPrint("IMAGEEEN:${_imagen64!}");
             );
 
             if (response.statusCode == 200) {
-              _showNotification("Producto eliminada con éxito.");
+              _showNotification("Producto eliminado con éxito.");
             } else {
 
-              _showNotification("Error al eliminar la Producto Código de estado: ${response.statusCode}");
+              _showNotification("Error al eliminar el Producto Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
@@ -457,32 +444,6 @@ debugPrint("IMAGEEEN:${_imagen64!}");
       },
     );
   }
-
-
-  Widget _botonModificar() {
-    return StreamBuilder(
-      stream: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return GestureDetector(
-          onTap: () {
-            print("se modifico 🔄");
-          },
-          child: Container(
-            width: 80.0,
-            height: 80.0,
-            decoration: BoxDecoration(
-              color: const Color(0xff290BE7), // color de fondo a verde
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Center(
-              child: Image.asset("assets/Iconos/update.png"),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
 
 
 
@@ -558,63 +519,3 @@ class _DropdownMenuCategoriaState extends State<DropdownMenuCategoria> {
 }
 
 
-
-
-
-
-
-class ImagePickerWidget extends StatefulWidget {
-  final Function(String)? onImageSelected;
-
-  const ImagePickerWidget({super.key, required this.onImageSelected});
-
-  @override
-  _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
-}
-
-class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  late File _imageFile;
-
-  @override
-  void initState() {
-    super.initState();
-    _imageFile = File(''); // Inicializa el archivo de imagen como vacío
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const Text("Seleccione imagen: "),
-            (_imageFile.path.isEmpty) ? Container() : Image.file(_imageFile),
-            ElevatedButton(
-              child: const Text("Cargar imagen"),
-              onPressed: () async {
-                final ImagePicker picker = ImagePicker();
-                XFile? pickedFile =
-                await picker.pickImage(source: ImageSource.gallery);
-                if (pickedFile != null) {
-                  setState(() {
-                    _imageFile = File(pickedFile.path);
-                    debugPrint("imagen: ${_imageFile.path}");
-
-                    // Convierte la imagen a base64
-                    List<int> imageBytes = _imageFile.readAsBytesSync();
-                    String base64Image = base64Encode(imageBytes);
-
-                    // Llama a la función de retorno de llamada y pasa la imagen en base64
-                    widget.onImageSelected?.call(base64Image);
-                  });
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
