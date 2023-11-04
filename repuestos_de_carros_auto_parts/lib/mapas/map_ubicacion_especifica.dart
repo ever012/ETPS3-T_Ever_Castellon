@@ -7,7 +7,7 @@ class MapUbicaciones extends StatefulWidget {
   final double longitud;
   final String nombre;
 
-  MapUbicaciones({required this.id, required this.latitud, required this.longitud, required this.nombre, Key? key}) : super(key: key);
+  const MapUbicaciones({required this.id, required this.latitud, required this.longitud, required this.nombre, Key? key}) : super(key: key);
 
   @override
   State<MapUbicaciones> createState() => _MapUbicacionesState();

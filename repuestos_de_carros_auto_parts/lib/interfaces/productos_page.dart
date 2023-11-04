@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'api_config.dart';
-import 'info_producto_page.dart';
+import 'package:repuestos_de_carros_auto_parts/api_config.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/info_producto_page.dart';
+
 
 void main() {
   runApp(const MyApp());

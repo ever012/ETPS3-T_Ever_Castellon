@@ -4,7 +4,7 @@ import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'api_config.dart';
+import '../api_config.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = "login_page";

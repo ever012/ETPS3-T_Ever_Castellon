@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
-import 'package:repuestos_de_carros_auto_parts/map_ubicaciones.dart';
-import 'package:repuestos_de_carros_auto_parts/productos_x_id_page.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/info_producto_page.dart';
+import 'package:repuestos_de_carros_auto_parts/mapas/map_ubicaciones.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/productos_x_id_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:repuestos_de_carros_auto_parts/login_page.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/login_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
-import 'package:repuestos_de_carros_auto_parts/nueva_categoria_page.dart';
-import 'package:repuestos_de_carros_auto_parts/nueva_sucursal_page.dart';
-import 'package:repuestos_de_carros_auto_parts/nueva_ubicacion_page.dart';
-import 'package:repuestos_de_carros_auto_parts/nuevo_producto_page.dart';
-import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
-import 'package:repuestos_de_carros_auto_parts/registrar_usuario_page.dart';
-import 'package:repuestos_de_carros_auto_parts/sucursales_page.dart';
-import 'info_producto_page.dart';
+import 'package:repuestos_de_carros_auto_parts/mantenimientos/nueva_categoria_page.dart';
+import 'package:repuestos_de_carros_auto_parts/mantenimientos/nueva_sucursal_page.dart';
+import 'package:repuestos_de_carros_auto_parts/mantenimientos/nueva_ubicacion_page.dart';
+import 'package:repuestos_de_carros_auto_parts/mantenimientos/nuevo_producto_page.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/productos_page.dart';
+import 'package:repuestos_de_carros_auto_parts/mantenimientos/registrar_usuario_page.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/sucursales_page.dart';
 
 
 void main() {
@@ -42,10 +42,10 @@ class MyApp extends StatelessWidget {
         '/login_page': (context) => const LoginPage(), //primera forma de hacerlo
         //LoginPage.id: (context) => LoginPage(), //segundo forma de hacerlo
         '/sucursales_Page': (context) => const SucursalesPage(),
-        '/productos_page': (context) => const ProductosPage(), //sucursal especifica
-        '/productos_x_id_page': (context) => const ProductosXID(), //sucursal especifica
-        '/nuevo_producto_page': (context) => const NuevoProductoPage(), //quitar al terminar
-        '/nueva_sucursal_page': (context) => const NuevaSucursalPage(), //quitar al terminar
+        '/productos_page': (context) => const ProductosPage(),
+        '/productos_x_id_page': (context) => const ProductosXID(),
+        '/nuevo_producto_page': (context) => const NuevoProductoPage(),
+        '/nueva_sucursal_page': (context) => const NuevaSucursalPage(),
         '/info_page': (context) => const InfoProductosPage(productoId: '123'), //necesita argumentos
         '/nueva_ubicacion_page': (context) => const UbicacionesPage(),
         '/nueva_categoria_page': (context) => const CategoriasPage(),

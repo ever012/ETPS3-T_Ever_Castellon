@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/appBar.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 
-import 'api_config.dart';
+import '../api_config.dart';
 
 class RegistrarPage extends StatefulWidget {
   static String id = "login_page";

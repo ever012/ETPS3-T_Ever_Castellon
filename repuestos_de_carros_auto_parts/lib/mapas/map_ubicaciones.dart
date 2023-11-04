@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'api_config.dart';
+import '../api_config.dart';
 
 class MapUbicaciones extends StatefulWidget {
   const MapUbicaciones({super.key});

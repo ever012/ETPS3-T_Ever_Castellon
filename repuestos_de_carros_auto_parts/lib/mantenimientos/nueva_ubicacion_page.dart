@@ -1,31 +1,14 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'api_config.dart';
-
-
+import '../api_config.dart';
 
 void main() {
   runApp(const MyApp());
 }
-
-//archivo aparte
-class Ubicacion {
-  final int idUbicacion;
-  final String nombre;
-
-  Ubicacion({required this.idUbicacion, required this.nombre});
-
-  factory Ubicacion.fromJson(Map<String, dynamic> json) {
-    return Ubicacion(
-      idUbicacion: json['id_ubicacion'],
-      nombre: json['nombre'],
-    );
-  }
-}//
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -41,31 +24,27 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 238, 238, 238),
       ),
       routes: {
-        '/': (context) =>  const NuevaSucursalPage(),
+        '/': (context) => const UbicacionesPage(),
       },
     );
   }
 }
 
-
-
-
-class NuevaSucursalPage extends StatefulWidget {
-  const NuevaSucursalPage({super.key});
+class UbicacionesPage extends StatefulWidget {
+  const UbicacionesPage({super.key});
 
   @override
-  _NuevaSucursalPageState createState() => _NuevaSucursalPageState();
+  _UbicacionesPageState createState() => _UbicacionesPageState();
 }
 
-class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
+class _UbicacionesPageState extends State<UbicacionesPage> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _codigoController = TextEditingController();
   final TextEditingController _nombreController = TextEditingController();
-  List<Ubicacion> ubicaciones = [];
-  String ubicacionDropdownValue = 'Seleccione Ubicación';
+  final TextEditingController _coordenadasLongitudController = TextEditingController();
+  final TextEditingController _coordenadasLatitudController = TextEditingController();
   String? nombreUsuario;
   String? tokenCompartido;
-
 
 // Crear una notificación en la parte inferior de la app
   void _showNotification(String message) {
@@ -78,21 +57,6 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
   void initState() {
     super.initState();
     _loadSharedPreferences();
-    _fetchUbicaciones();
-  }
-
-  Future<void> _fetchUbicaciones() async {
-    final response =
-    await http.get(Uri.parse('${ApiConfig.apiUrl}api/ubicacion/listaUbicacion'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      setState(() {
-        ubicaciones = data.map((item) => Ubicacion.fromJson(item)).toList();
-      });
-    } else {
-      throw Exception('Failed to load ubicaciones');
-    }
   }
 
   Future<void> _loadSharedPreferences() async {
@@ -110,41 +74,39 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text("Sucursal",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),),
-          centerTitle: true,),
+        appBar: AppBar(
+          title: const Text(
+            "Ubicaciones",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+          ),
+          centerTitle: true,
+        ),
         drawer: const MenuLateralAdmin(),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 30.0,),
+                const SizedBox(height: 30.0),
                 _idTextField(),
-                const SizedBox(height: 30.0,),
+                const SizedBox(height: 30.0),
                 _codigoTextField(),
-                const SizedBox(height: 15.0,),
+                const SizedBox(height: 15.0),
                 _nombreTextField(),
-                const SizedBox(height: 15.0,),
-                DropdownMenuUbicaciones(
-                  ubicaciones: ubicaciones, // Lista de ubicaciones obtenidas de la API
-                  onSelected: (int? value) {
-                    setState(() {
-                      ubicacionDropdownValue = value?.toString() ?? 'Seleccione Ubicación';
-                    });
-                  },
-                ),
-                const SizedBox(height: 20.0,),
+                const SizedBox(height: 15.0),
+                _coordenadasLongitudTextField(),
+                const SizedBox(height: 15.0),
+                _coordenadasLatitudTextField(),
+                const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // Ajusta la alineación según tus necesidades
                   children: [
                     _botonGuardar(),
                     _botonEliminar(),
                     _botonModificar(),
                   ],
                 ),
-                const SizedBox(height: 20.0,),
+                const SizedBox(height: 20.0),
               ],
             ),
           ),
@@ -195,17 +157,20 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _codigoController,
-              keyboardType: TextInputType.number, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.number,
+              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)),),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
-                hintText: 'Ingrese un Codigo',
+                hintText: 'Codigo Ubicacion',
                 labelText: 'Codigo',
                 labelStyle: TextStyle(color: Colors.black),
                 focusColor: Colors.teal,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(
+                      color: Colors.black), // Cambio de color a negro
 
                 ),
               ),
@@ -215,6 +180,7 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
           );
         });
   }
+
 
   Widget _nombreTextField() {
     return StreamBuilder(
@@ -224,9 +190,11 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: TextField(
               controller: _nombreController,
-              keyboardType: TextInputType.text, //pone por defecto el teclado con arroba y demas
+              keyboardType: TextInputType.text,
+              //pone por defecto el teclado con arroba y demas
               decoration: const InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
                 hintText: 'Ingrese Nombre',
                 labelText: 'Nombre',
@@ -234,7 +202,8 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
                 focusColor: Colors.teal,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Colors.black), // Cambio de color a negro
+                  borderSide: BorderSide(
+                      color: Colors.black), // Cambio de color a negro
 
                 ),
               ),
@@ -245,9 +214,73 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
         });
   }
 
+  Widget _coordenadasLongitudTextField() {
+    return StreamBuilder(
+        stream: null,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: TextField(
+              controller: _coordenadasLongitudController,
+              keyboardType: TextInputType.text,
+              //pone por defecto el teclado con arroba y demas
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),),
+                //icon: Icon(Icons.numbers),
+                hintText: 'Longitud',
+                labelText: 'Longitud',
+                labelStyle: TextStyle(color: Colors.black),
+                focusColor: Colors.teal,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(
+                      color: Colors.black), // Cambio de color a negro
+
+                ),
+              ),
+
+              onChanged: (value) {
 
 
+              },
+            ),
+          );
+        });
+  }
 
+
+  Widget _coordenadasLatitudTextField() {
+    return StreamBuilder(
+        stream: null,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: TextField(
+              controller: _coordenadasLatitudController,
+              keyboardType: TextInputType.text,
+              //pone por defecto el teclado con arroba y demas
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),),
+                //icon: Icon(Icons.numbers),
+                hintText: 'Latitud',
+                labelText: 'Latitud',
+                labelStyle: TextStyle(color: Colors.black),
+                focusColor: Colors.teal,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(
+                      color: Colors.black), // Cambio de color a negro
+
+                ),
+              ),
+
+              onChanged: (value) {},
+            ),
+          );
+        });
+  }
 
   Widget _botonGuardar() {
     return StreamBuilder(
@@ -258,21 +291,22 @@ class _NuevaSucursalPageState extends State<NuevaSucursalPage> {
             // Obtén los valores de los controladores de texto
             String codigo = _codigoController.text;
             String nombre = _nombreController.text;
-            String ubicacion = ubicacionDropdownValue;
+            String longitud = _coordenadasLongitudController.text;
+            String latitud = _coordenadasLatitudController.text;
 
             // Crea un mapa con los datos que quieres enviar al servidor
             Map<String, dynamic> data = {
-              "cod_sucursal": codigo,
+              "cod_ubicacion": codigo,
               "nombre": nombre,
-              "id_ubicacion": ubicacion,
-              "ubicacion": {}
+              "longitud": longitud,
+              "latitud": latitud,
             };
 
             // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
-debugPrint("ubicacion:$jsonData");
+
             // URL del endpoint de la API donde deseas enviar los datos
-            String apiUrl = "${ApiConfig.apiUrl}api/sucursal/crearSucursal";
+            String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/crearUbicacion";
 
             // Realiza la solicitud HTTP POST con el encabezado de autorización
             var response = await http.post(
@@ -287,15 +321,16 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Sucursal agregada con éxito.");
+              _showNotification("Ubicación agregada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al agregar la Sucursal Código de estado: ${response.statusCode}");
+              _showNotification("Error al agregar la ubicación. Código de estado: ${response
+                  .statusCode}");
             }
           },
           child: Container(
-            width: 80.0,
-            height: 80.0,
+            width: 80.0, // Ajusta el ancho según tus necesidades
+            height: 80.0, // Ajusta el alto según tus necesidades
             decoration: BoxDecoration(
               color: const Color(0xff229743), // Cambia el color de fondo a verde
               borderRadius: BorderRadius.circular(10.0),
@@ -320,7 +355,7 @@ debugPrint("ubicacion:$jsonData");
             String id = _idController.text;
 
             // URL del endpoint de la API donde deseas enviar la solicitud DELETE
-            String apiUrl = "${ApiConfig.apiUrl}api/sucursal/eliminarSucursal?id=$id";
+            String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/eliminarUbicacion?id=$id";
             debugPrint("IDDDDDD:$apiUrl");
             // Realiza la solicitud HTTP DELETE con el encabezado de autorización
             var response = await http.delete(
@@ -333,10 +368,10 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Sucursal eliminada con éxito");
+              _showNotification("Ubicación eliminada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al eliminar la Sucursal Código de estado: ${response.statusCode}");
+              _showNotification("Error al eliminar la ubicación. Código de estado: ${response.statusCode}");
             }
           },
           child: Container(
@@ -366,21 +401,22 @@ debugPrint("ubicacion:$jsonData");
             String id = _idController.text;
             String codigo = _codigoController.text;
             String nombre = _nombreController.text;
-            String ubicacion = ubicacionDropdownValue;
+            String longitud = _coordenadasLongitudController.text;
+            String latitud = _coordenadasLatitudController.text;
 
             // Crea un mapa con los datos que quieres enviar al servidor
             Map<String, dynamic> data = {
-              "cod_sucursal": codigo,
+              "cod_ubicacion": codigo,
               "nombre": nombre,
-              "id_ubicacion": ubicacion,
-              "ubicacion": {}
+              "longitud": longitud,
+              "latitud": latitud,
             };
 
             // Convierte el mapa a un JSON
             String jsonData = jsonEncode(data);
 
             // URL del endpoint de la API donde deseas enviar los datos
-            String apiUrl = "${ApiConfig.apiUrl}api/sucursal/actualizaSucursal?id=$id";
+            String apiUrl = "${ApiConfig.apiUrl}api/ubicacion/actualizaUbicacion?id=$id";
 
             // Realiza la solicitud HTTP POST con el encabezado de autorización
             var response = await http.put(
@@ -395,10 +431,10 @@ debugPrint("ubicacion:$jsonData");
             // Verifica el estado de la respuesta
             if (response.statusCode == 200) {
               // Si la solicitud fue exitosa, imprime la respuesta del servidor
-              _showNotification("Sucursal modificada con éxito.");
+              _showNotification("Ubicación modificada con éxito.");
             } else {
               // Si la solicitud falla, imprime el código de estado
-              _showNotification("Error al modificar la Sucursal Código de estado: ${response
+              _showNotification("Error al modificar la ubicación. Código de estado: ${response
                   .statusCode}");
             }
           },
@@ -419,60 +455,9 @@ debugPrint("ubicacion:$jsonData");
   }
 
 
-
-
-
-
-
-
-
 }
 
 
-
-//const List<String> list = <String>['Seleccione Ubicación','One', 'Two', 'Three', 'Four'];
-class DropdownMenuUbicaciones extends StatefulWidget {
-  final List<Ubicacion> ubicaciones;
-  final ValueChanged<int?> onSelected;
-
-  const DropdownMenuUbicaciones({
-    required this.ubicaciones,
-    required this.onSelected,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<DropdownMenuUbicaciones> createState() => _DropdownMenuUbicacionesState();
-}
-
-class _DropdownMenuUbicacionesState extends State<DropdownMenuUbicaciones> {
-  int? dropdownValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<int>(
-      value: dropdownValue,
-      onChanged: (int? value) {
-        setState(() {
-          dropdownValue = value;
-        });
-        widget.onSelected(value);
-      },
-      items: [
-        const DropdownMenuItem<int>(
-          value: null, // Indicador visual sin valor real asociado
-          child: Text('Seleccione una ubicación'),
-        ),
-        ...widget.ubicaciones.map((Ubicacion ubicacion) {
-          return DropdownMenuItem<int>(
-            value: ubicacion.idUbicacion,
-            child: Text(ubicacion.nombre),
-          );
-        }).toList(),
-      ],
-    );
-  }
-}
 
 
 

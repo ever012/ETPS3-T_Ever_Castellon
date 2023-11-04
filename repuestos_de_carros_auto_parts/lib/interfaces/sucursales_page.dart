@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:repuestos_de_carros_auto_parts/productos_page.dart';
+import 'package:repuestos_de_carros_auto_parts/interfaces/productos_page.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'api_config.dart';
+import '../api_config.dart';
 
 void main() {
   runApp(const MyApp());

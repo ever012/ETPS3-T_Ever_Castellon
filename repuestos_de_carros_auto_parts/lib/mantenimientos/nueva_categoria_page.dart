@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:repuestos_de_carros_auto_parts/menu_lateral_admin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'api_config.dart';
+import '../api_config.dart';
 
 
 void main() {
