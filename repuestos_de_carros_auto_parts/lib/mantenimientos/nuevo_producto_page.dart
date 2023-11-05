@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -11,6 +12,35 @@ import '../api_config.dart';
 void main() {
   runApp(const MyApp());
 }
+
+//archivo aparte
+class Sucursal {
+  final int idSucursal;
+  final String nombre;
+
+  Sucursal({required this.idSucursal, required this.nombre});
+
+  factory Sucursal.fromJson(Map<String, dynamic> json) {
+    return Sucursal(
+      idSucursal: json['id_sucursal'],
+      nombre: json['nombre'],
+    );
+  }
+}//
+//archivo aparte2
+class Categoria {
+  final int idCategoria;
+  final String nombre;
+
+  Categoria({required this.idCategoria, required this.nombre});
+
+  factory Categoria.fromJson(Map<String, dynamic> json) {
+    return Categoria(
+      idCategoria: json['id_categoria'],
+      nombre: json['nombre'],
+    );
+  }
+}//
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,13 +82,14 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
   final TextEditingController _descripcionController = TextEditingController();
   final TextEditingController _precioController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
-  String? imagePath = "";
-  final String _imagen64 = "";
-  String sucursalDropdownValue = 'Seleccione Sucursal';
-  String categoriaDropdownValue = 'Seleccione categoria';
   String? nombreUsuario;
   String? tokenCompartido;
   XFile? pickedFile;
+  List<Sucursal> sucursales = [];
+  String sucursalDropdownValue = 'Seleccione Sucursal';
+  List<Categoria> categorias = [];
+  String categoriaDropdownValue = 'Seleccione categoria';
+
 
 // Crear una notificación en la parte inferior de la app
   void _showNotification(String message) {
@@ -71,9 +102,36 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
   void initState() {
     super.initState();
     _loadSharedPreferences();
+    _fetchSucursales();
+    _fetchCategorias();
   }
 
+  Future<void> _fetchSucursales() async {
+    final response =
+    await http.get(Uri.parse('${ApiConfig.apiUrl}api/sucursal/listaSucursal'));
 
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        sucursales = data.map((item) => Sucursal.fromJson(item)).toList();
+      });
+    } else {
+      throw Exception('Failed to load sucursales');
+    }
+  }
+  Future<void> _fetchCategorias() async {
+    final response =
+    await http.get(Uri.parse('${ApiConfig.apiUrl}api/categoria/listaCategoria'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        categorias = data.map((item) => Categoria.fromJson(item)).toList();
+      });
+    } else {
+      throw Exception('Failed to load categorias');
+    }
+  }
   Future<void> _loadSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? tokenShared = prefs.getString('token');
@@ -122,18 +180,20 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
                     const SizedBox(height: 15.0,),
                     _precioTextField(),
                     const SizedBox(height: 15.0,),
-                    DropdownMenuSucursal(
-                      onSelected: (String? value) {
+                    DropdownMenuSucursales(
+                      sucursales: sucursales, // Lista de sucursales obtenidas de la API
+                      onSelected: (int? value) {
                         setState(() {
-                          sucursalDropdownValue = value ?? 'Seleccione Sucursal';
+                          sucursalDropdownValue = value?.toString() ?? 'Seleccione Ubicación';
                         });
                       },
                     ),
                     const SizedBox(height: 15.0,),
                     DropdownMenuCategoria(
-                      onSelected: (String? value) {
+                      categorias: categorias, // Lista de categorias obtenidas de la API
+                      onSelected: (int? value) {
                         setState(() {
-                          categoriaDropdownValue = value ?? 'Seleccione Categoria';
+                          categoriaDropdownValue = value?.toString() ?? 'Seleccione Categoria';
                         });
                       },
                     ),
@@ -168,7 +228,7 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),),
                 //icon: Icon(Icons.numbers),
-                hintText: 'Id Ubicacion',
+                hintText: 'Id Producto',
                 labelText: 'ID',
                 labelStyle: TextStyle(color: Colors.black),
                 focusColor: Colors.teal,
@@ -455,67 +515,88 @@ class _NuevoProductoPageState extends State<NuevoProductoPage> {
 
 
 
-const List<String> list_1 = <String>['Seleccione Sucursal','5', 'Two', 'Three', 'Four'];
-class DropdownMenuSucursal extends StatefulWidget {
-  final ValueChanged<String?> onSelected;
+class DropdownMenuSucursales extends StatefulWidget {
+  final List<Sucursal> sucursales;
+  final ValueChanged<int?> onSelected;
 
-  const DropdownMenuSucursal({required this.onSelected, Key? key}) : super(key: key);
+  const DropdownMenuSucursales({
+    required this.sucursales,
+    required this.onSelected,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<DropdownMenuSucursal> createState() => _DropdownMenuSucursalState();
+  State<DropdownMenuSucursales> createState() => _DropdownMenuSucursalesState();
 }
 
-class _DropdownMenuSucursalState extends State<DropdownMenuSucursal> {
-  String dropdownValue = list_1.first;
+class _DropdownMenuSucursalesState extends State<DropdownMenuSucursales> {
+  int? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu<String>(
-      initialSelection: dropdownValue,
-      onSelected: (String? value) {
+    return DropdownButtonFormField<int>(
+      value: dropdownValue,
+      onChanged: (int? value) {
         setState(() {
-          dropdownValue = value!;
-          widget.onSelected(value); // Llama a la función proporcionada por el padre
+          dropdownValue = value;
         });
+        widget.onSelected(value);
       },
-      dropdownMenuEntries: list_1.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
-      }).toList(),
-      width: 350,
+      items: [
+        const DropdownMenuItem<int>(
+          value: null, // Indicador visual sin valor real asociado
+          child: Text('Seleccione una ubicación'),
+        ),
+        ...widget.sucursales.map((Sucursal sucursal) {
+          return DropdownMenuItem<int>(
+            value: sucursal.idSucursal,
+            child: Text(sucursal.nombre),
+          );
+        }).toList(),
+      ],
     );
   }
 }
 
-
-const List<String> list = <String>['Seleccione Categoria','1', 'Two', 'Three', 'Four'];
 class DropdownMenuCategoria extends StatefulWidget {
-  final ValueChanged<String?> onSelected;
+  final List<Categoria> categorias;
+  final ValueChanged<int?> onSelected;
 
-  const DropdownMenuCategoria({required this.onSelected, Key? key}) : super(key: key);
+  const DropdownMenuCategoria({
+    required this.categorias,
+    required this.onSelected,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DropdownMenuCategoria> createState() => _DropdownMenuCategoriaState();
 }
 
 class _DropdownMenuCategoriaState extends State<DropdownMenuCategoria> {
-  String dropdownValue = list.first;
+  int? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu<String>(
-      initialSelection: dropdownValue,
-      onSelected: (String? value) {
+    return DropdownButtonFormField<int>(
+      value: dropdownValue,
+      onChanged: (int? value) {
         setState(() {
-          dropdownValue = value!;
-          widget.onSelected(value); // Llama a la función proporcionada por el padre
+          dropdownValue = value;
         });
+        widget.onSelected(value);
       },
-      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
-      }).toList(),
-      width: 350,
+      items: [
+        const DropdownMenuItem<int>(
+          value: null, // Indicador visual sin valor real asociado
+          child: Text('Seleccione una categoria'),
+        ),
+        ...widget.categorias.map((Categoria categoria) {
+          return DropdownMenuItem<int>(
+            value: categoria.idCategoria,
+            child: Text(categoria.nombre),
+          );
+        }).toList(),
+      ],
     );
   }
 }
-
-
